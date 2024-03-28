@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run lint-staged
+echo 'Check for linting errors and run tests before commiting ...'
+npm run check ||
+(echo 'Linting error or tests failed. Please fix them before commiting' && exit 1)
+
+echo 'Done'
