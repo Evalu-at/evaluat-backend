@@ -1,4 +1,5 @@
 const db = require("../../database");
+const bcrypt = require("bcrypt");
 
 class UserRepository {
     async findEmail(email) {
@@ -14,11 +15,13 @@ class UserRepository {
     }
 
     async createUser({ id, email, nome, senha }) {
+        const hashPass = await bcrypt.hash(senha, 10);
+
         const query = {
             name: "create-user",
             text: "INSERT INTO usuario(id, email, nome, senha) \
             VALUES($1, $2, $3, $4)",
-            values: [id, email, nome, senha],
+            values: [id, email, nome, hashPass],
         };
 
         const rows = await db.query(query);
