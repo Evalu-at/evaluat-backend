@@ -1,4 +1,5 @@
 const UserRepository = require("../repositories/UserRepository");
+const bcrypt = require('bcrypt');
 
 class UserController {
     async show(request, response) {
@@ -36,6 +37,31 @@ class UserController {
         });
 
         response.json(create);
+    }
+
+    async checkValidLogin(response, email) {
+        try{
+
+            const userMatch = await UserRepository.findEmail(email);
+
+            if(!userMatch)
+                return response.status(401).json({ error: 'Authentication Failed' });
+            
+            const password = await UserRepository.findPassword(email);
+            
+            const passwordMatch = await bcrypt.compare(password, UserRepository.password);
+            
+            if(!passwordMatch)
+                return response.status(401).json({ error: 'Authentication Failed' });
+
+            /* const token = jwt.sign({ UserId: user.id }, 'your-secret-key', { expiresIn: '1h', }); 
+            response.status(200).json({ token }); Att. Mateus */
+
+            response.status(200).json({ success: 'Login success' })
+            
+        }catch(e){
+            response.status(500).json({ error: "Login failed" });
+        }
     }
 }
 

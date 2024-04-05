@@ -12,6 +12,18 @@ class UserRepository {
 
         return rows;
     }
+    
+    async findPassword(email) {
+        const query = {
+            name: "fetch-email",
+            text: "SELECT senha FROM usuario WHERE email = $1",
+            values: [email],
+        };
+
+        const password = await db.query(query);
+
+        return password;
+    }
 
     async createUser({ id, email, nome, senha }) {
         const query = {
