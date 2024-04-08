@@ -54,17 +54,23 @@ class UserController {
 
       if (!passwordMatch) return response.status(401).json({ error: 'Authentication Failed' });
 
-
       // Apesar de nao achar que deve ser usado o userMatch aqui como UserID, coloquei
       // temporariamente pois nao sabia onde pegar o ID.
+      const token = jwt.sign({ userId: userMatch }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
-      const token = jwt.sign({ UserId: userMatch }, process.env.JWT_SECRET, { expiresIn: 90 });
-      response.status(200).json({ token });
-
-      response.status(200).json({ success: 'Login success' });
+      // Verificar tags de seguranca dos cookies
+      response.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: 'Login success' });
     } catch (e) {
       response.status(500).json({ error: 'Login failed' });
     }
+  }
+
+  async formulario(request, response) {
+    return response.status(200).json({ message: 'testando authorizacao de acesso ao formulario' });
+  }
+
+  async logOut(request, response) {
+    return response.clearCookie('access_token').status(200).json({ success: 'Logout success' });
   }
 }
 
