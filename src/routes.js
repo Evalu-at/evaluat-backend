@@ -24,9 +24,11 @@ router.get('/', (req, res) => {
   res.send('Hello World from Evalu.at!');
 });
 
-router.get('/user/:id', UserController.show);
-router.post('/user', UserController.add);
-router.get('/logout', authorization, UserController.logOut);
+router.get('/user/id', UserController.show);
+router.post('/user/add', UserController.add);
+router.post('/user/login', UserController.checkValidLogin);
+router.get('/user/logout', authorization, UserController.logOut);
+
 router.get('/formulario', authorization, UserController.formulario);
 
 module.exports = router;
