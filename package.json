@@ -271,6 +271,7 @@
     "strip-json-comments": "^3.1.1",
     "supports-color": "^7.2.0",
     "supports-preserve-symlinks-flag": "^1.0.0",
+    "swagger-ui-express": "^5.0.0",
     "text-table": "^0.2.0",
     "to-regex-range": "^5.0.1",
     "toidentifier": "^1.0.1",
@@ -311,7 +312,8 @@
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
     "prepare": "husky && husky install",
-    "check": "eslint . --ext .js"
+    "check": "eslint . --ext .js",
+    "swagger": "node swagger.js"
   },
   "keywords": [],
   "author": "",
@@ -323,6 +325,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
     "husky": "^8.0.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "swagger-autogen": "^2.23.7"
   }
 }
