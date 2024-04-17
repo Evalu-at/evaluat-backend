@@ -310,7 +310,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
-    "prepare": "husky",
+    "prepare": "husky && husky install",
     "check": "eslint . --ext .js"
   },
   "keywords": [],
@@ -322,7 +322,7 @@
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "nodemon": "^3.1.0"
   }
 }

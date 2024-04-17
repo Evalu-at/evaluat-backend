@@ -2,6 +2,7 @@ const { Router } = require('express');
 const cookieParser = require('cookie-parser');
 
 const UserController = require('./app/controllers/UserController');
+const Middleware = require('./app/middlewares/Middleware');
 
 const router = Router();
 
@@ -27,8 +28,8 @@ router.get('/', (req, res) => {
 router.get('/user/id', UserController.show);
 router.post('/user/add', UserController.add);
 router.post('/user/login', UserController.checkValidLogin);
-router.get('/user/logout', UserController.authorization, UserController.logOut);
+router.get('/user/logout', Middleware.authorization, UserController.logOut);
 
-router.get('/formulario', UserController.authorization, UserController.formulario);
+router.get('/formulario', Middleware.authorization, UserController.formulario);
 
 module.exports = router;

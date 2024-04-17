@@ -50,7 +50,7 @@ class UserController {
                 .status(401)
                 .json({ error: "Authentication Failed" });
 
-        const password = await UserRepository.findPassword(email);
+            const password = await UserRepository.findPassword(email);
 
             const passwordMatch = await bcrypt.compare(
                 String(senha),
@@ -64,6 +64,8 @@ class UserController {
             const userUUId = await UserRepository.findId(email);
 
             const token = jwt.sign({ userId: userUUId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+
+            console.log(token);
             // Verificar tags de seguranca dos cookies!
             return response.status(200).cookie('access_token', token).json({ success: 'Login success' });
         } catch (e) {
@@ -82,18 +84,6 @@ class UserController {
             .clearCookie("access_token")
             .status(200)
             .json({ success: "Logout success" });
-    }
-
-    authorization = (request, response, next) => {
-        const token = request.cookies.access_token;
-        if (!token) { return response.sendStatus(403) }
-        try {
-            const data = jwt.verify(token, process.env.JWT_SECRET);
-            request.userId = data.userId;
-            return next();
-        } catch {
-            return response.sendStatus(403);
-        }
     }
 }
 
