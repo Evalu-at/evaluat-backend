@@ -62,6 +62,7 @@
     "diff": "^4.0.2",
     "dir-glob": "^3.0.1",
     "doctrine": "^3.0.0",
+    "dotenv": "^16.4.5",
     "dynamic-dedupe": "^0.3.0",
     "ee-first": "^1.1.1",
     "encodeurl": "^1.0.2",

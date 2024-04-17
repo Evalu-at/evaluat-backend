@@ -8,7 +8,7 @@ const router = Router();
 router.use(cookieParser());
 
 // Validar se esse lugar para o metodo de authorization realmente esta correto ou nao.
-const authorization = (request, response, next) => {
+/* const authorization = (request, response, next) => {
     const token = request.cookies.access_token;
     if (!token) { return response.sendStatus(403) }
     try {
@@ -18,7 +18,7 @@ const authorization = (request, response, next) => {
     } catch {
         return response.sendStatus(403);
     }
-}
+} */
 
 router.get('/', (req, res) => {
   res.send('Hello World from Evalu.at!');
@@ -27,8 +27,8 @@ router.get('/', (req, res) => {
 router.get('/user/id', UserController.show);
 router.post('/user/add', UserController.add);
 router.post('/user/login', UserController.checkValidLogin);
-router.get('/user/logout', authorization, UserController.logOut);
+router.get('/user/logout', UserController.authorization, UserController.logOut);
 
-router.get('/formulario', authorization, UserController.formulario);
+router.get('/formulario', UserController.authorization, UserController.formulario);
 
 module.exports = router;

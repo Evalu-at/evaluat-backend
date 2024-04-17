@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserRepository = require("../repositories/UserRepository");
+require('dotenv').config();
 
 class UserController {
     async show(request, response) {
@@ -45,30 +46,26 @@ class UserController {
             const userMatch = await UserRepository.findEmail(email);
 
             if (!userMatch[0].exists)
-                return response
-                    .status(401)
-                    .json({ error: "Authentication Failed" });
+            return response
+                .status(401)
+                .json({ error: "Authentication Failed" });
 
-            const password = await UserRepository.findPassword(email);
+        const password = await UserRepository.findPassword(email);
 
             const passwordMatch = await bcrypt.compare(
                 String(senha),
                 String(password[0].senha),
             );
-
             if (!passwordMatch)
                 return response
                     .status(401)
                     .json({ error: "Authentication Failed" });
 
-            // Apesar de nao achar que deve ser usado o userMatch aqui como UserID, coloquei
-            // temporariamente pois nao sabia onde pegar o ID.
-            //const token = jwt.sign({ userId: userMatch }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+            const userUUId = await UserRepository.findId(email);
 
-            // Verificar tags de seguranca dos cookies
-            //response.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: 'Login success' });
-
-            return response.json({ success: "Login success" });
+            const token = jwt.sign({ userId: userUUId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+            // Verificar tags de seguranca dos cookies!
+            return response.status(200).cookie('access_token', token).json({ success: 'Login success' });
         } catch (e) {
             response.status(500).json({ error: "Login failed" });
         }
@@ -85,6 +82,18 @@ class UserController {
             .clearCookie("access_token")
             .status(200)
             .json({ success: "Logout success" });
+    }
+
+    authorization = (request, response, next) => {
+        const token = request.cookies.access_token;
+        if (!token) { return response.sendStatus(403) }
+        try {
+            const data = jwt.verify(token, process.env.JWT_SECRET);
+            request.userId = data.userId;
+            return next();
+        } catch {
+            return response.sendStatus(403);
+        }
     }
 }
 
