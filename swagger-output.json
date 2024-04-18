@@ -1,20 +1,28 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "version": "0.1.2",
+    "title": "Evalu.at API",
+    "description": "Documentation of the endpoints from the Evalu.at API"
   },
   "servers": [
     {
-      "url": "",
+      "url": "https://evalu-at.github.io/evaluat-backend/",
       "description": ""
     }
   ],
   "tags": [
     {
-      "name": "",
+      "name": "default",
       "description": ""
+    },
+    {
+      "name": "user",
+      "description": "user endpoints"
+    },
+    {
+      "name": "adm",
+      "description": "adm endpoints"
     }
   ],
   "paths": {
@@ -30,6 +38,10 @@
     },
     "/user/id": {
       "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a user by email",
         "description": "",
         "responses": {
           "200": {
@@ -38,11 +50,25 @@
           "404": {
             "description": "Not Found"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userIdBody"
+              }
+            }
+          }
         }
       }
     },
     "/user/add": {
       "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create a new user",
         "description": "",
         "responses": {
           "200": {
@@ -56,21 +82,11 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "nome": {
-                    "example": "any"
-                  },
-                  "senha": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/userAddBody"
               }
             }
           }
@@ -79,6 +95,10 @@
     },
     "/user/login": {
       "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Login an existent user",
         "description": "",
         "responses": {
           "200": {
@@ -92,18 +112,11 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "senha": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/userLoginBody"
               }
             }
           }
@@ -112,6 +125,10 @@
     },
     "/user/logout": {
       "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logout the loged user",
         "description": "",
         "responses": {
           "403": {
@@ -122,6 +139,10 @@
     },
     "/formulario": {
       "get": {
+        "tags": [
+          "adm"
+        ],
+        "summary": "Endpoint in test",
         "description": "",
         "responses": {
           "200": {
@@ -131,6 +152,61 @@
             "description": "Forbidden"
           }
         }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "userIdBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "user@email.com"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "userAddBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@email.com"
+          },
+          "nome": {
+            "type": "string",
+            "example": "username"
+          },
+          "senha": {
+            "type": "string",
+            "example": "password"
+          }
+        },
+        "required": [
+          "email",
+          "nome",
+          "senha"
+        ]
+      },
+      "userLoginBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "password"
+          }
+        },
+        "required": [
+          "email",
+          "senha"
+        ]
       }
     }
   }
