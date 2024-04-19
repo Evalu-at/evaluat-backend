@@ -6,23 +6,7 @@ require('dotenv').config();
 class UserController {
 
     async show(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Returns a user by email'
-        */
         const { email } = request.body;
-
-        /*  #swagger.requestBody = {
-                required: true,
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/userIdBody"
-                        }
-                    }
-                }
-            }
-        */
 
         const users = await UserRepository.findEmail(email);
 
@@ -34,24 +18,9 @@ class UserController {
     }
 
     async add(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Create a new user'
-        */
 
         try {
             const { email, nome, senha } = request.body;
-            /*  #swagger.requestBody = {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/userAddBody"
-                            }
-                        }
-                    }
-                }
-            */
 
             const userExists = await UserRepository.findEmail(email);
 
@@ -74,23 +43,8 @@ class UserController {
     }
 
     async checkValidLogin(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Login an existent user'
-        */
 
         const { email, senha } = request.body;
-            /*  #swagger.requestBody = {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/userLoginBody"
-                            }
-                        }
-                    }
-                }
-            */
 
         try {
             const userMatch = await UserRepository.findEmail(email);
@@ -123,21 +77,13 @@ class UserController {
         }
     }
 
-    async formulario(request, response) {
-        /*
-            #swagger.tags = ['adm']
-            #swagger.summary = 'Endpoint in test'
-        */
+    async formulario(response) {
         return response
             .status(200)
             .json({ message: "testando authorizacao de acesso ao formulario" });
     }
 
-    async logOut(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Logout the loged user'
-        */
+    async logOut(response) {
 
         return response
             .clearCookie("access_token")
