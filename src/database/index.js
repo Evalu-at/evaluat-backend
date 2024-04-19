@@ -1,16 +1,16 @@
-const { Pool } = require('pg');
+// const { Pool } = require('pg');
 
 const pool = new Pool({
-    user: 'evaluat-adm',
+    user: 'luix',
     host: 'localhost',
     database: 'postgres',
-    password: '910f4444bb75187fcbc4ba493281a15b',
+    password: 'meme',
     port: 5432
 });
 
-pool.connect();
+// pool.connect();
 
-exports.query = async (query, values) => {
-    const { rows } = await pool.query(query, values);
-    return rows;
-};
+// exports.query = async (query, values) => {
+//   const { rows } = await pool.query(query, values);
+//   return rows;
+// };
