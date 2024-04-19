@@ -1,4 +1,6 @@
 const nodemailer =  require('nodemailer');
+const UserRepository = require('../repositories/UserRepository');
+/* const permissions = require('../config/roles.json'); // discutir necessidade de uso */
 
 class Middleware{
     authorization = (request, response, next) => {
@@ -38,6 +40,16 @@ class Middleware{
             response.status(200).send({ message: 'Email enviado!', message_id: info.messageId });
             return next();
         })
+    }
+
+    checkRole = (request, response, permissionRole, next) => {
+        const { email } = request.body;
+        const role = UserRepository.findRole(email);
+
+        if (role === permissionRole)
+            return next();
+
+        return response.status(403).send({ message: 'User role not authorized' });
     }
 }
 
