@@ -14,3 +14,5 @@
 //   const { rows } = await pool.query(query, values);
 //   return rows;
 // };
+
+// Foi comentado para nao gerar erro de acesso ao banco de dados em PCs que nao tenham o PostgreSQL

@@ -1,3 +1,5 @@
+const nodemailer =  require('nodemailer');
+
 class Middleware{
     authorization = (request, response, next) => {
         const token = request.cookies.access_token;
@@ -9,6 +11,33 @@ class Middleware{
         } catch {
             return response.sendStatus(403);
         }
+    }
+
+    email_verification = (request, response, next) => {
+        const { email } = request.body;
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.SENDER_EMAIL,
+                pass: process.env.SENDER_PASS // Tem que colocar as chaves do google pra funcionar
+            },
+        })
+
+        const mail_data = {
+            from: 'evaluat2024.1@gmail.com',
+            to: email,
+            subject: 'Codigo de Verificacao de Email - Evalu.At',
+            text: '123 456' // Colocar numero gerado aleatoriamente
+        }
+
+        transporter.sendMail(mail_data, (err, info) => {
+            if (err) {
+                console.log(err);
+                return response.sendStatus(500);
+            }
+            response.status(200).send({ message: 'Email enviado!', message_id: info.messageId });
+            return next();
+        })
     }
 }
 
