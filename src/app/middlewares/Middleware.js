@@ -1,4 +1,5 @@
 const nodemailer =  require('nodemailer');
+require('dotenv').config();
 
 class Middleware{
     authorization = (request, response, next) => {
@@ -16,18 +17,21 @@ class Middleware{
     email_verification = (request, response, next) => {
         const { email } = request.body;
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            service: 'Gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.SENDER_EMAIL,
-                pass: process.env.SENDER_PASS // Tem que colocar as chaves do google pra funcionar
+                pass: process.env.SENDER_PASS
             },
         })
 
         const mail_data = {
-            from: 'evaluat2024.1@gmail.com',
+            from: process.env.SENDER_EMAIL,
             to: email,
             subject: 'Codigo de Verificacao de Email - Evalu.At',
-            text: '123 456' // Colocar numero gerado aleatoriamente
+            text: '458 675' // Colocar numero gerado aleatoriamente
         }
 
         transporter.sendMail(mail_data, (err, info) => {
