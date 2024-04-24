@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: evaluat_db
+    environment:
+      POSTGRES_USER: evaluat_admin
+      POSTGRES_PASSWORD: evaluat_admin
+      POSTGRES_DB: evaluat_db_test
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - evaluat_network
+
+networks:
+  evaluat_network:
+    driver: bridge
+
+#  psql -U evaluat_admin -d evaluat_db_test
