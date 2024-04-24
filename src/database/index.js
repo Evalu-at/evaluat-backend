@@ -1,5 +1,4 @@
 const { Pool } = require('pg');
-const fs = require('fs');
 
 const pool = new Pool({
     user: 'evaluat-adm',
@@ -10,15 +9,6 @@ const pool = new Pool({
 });
 
 pool.connect();
-
-// Create Table from scheme.sql query
-fs.readFile('./src/database/scheme.sql', (err, data) => {
-    if (err) throw err;
-
-    pool.query(data.toString(), (err, res) =>{
-        if (err) throw err;
-    });
-});
 
 exports.query = async (query, values) => {
    const { rows } = await pool.query(query, values);

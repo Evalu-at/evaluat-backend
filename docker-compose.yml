@@ -3,11 +3,11 @@ version: '3.8'
 services:
   db:
     image: postgres
-    container_name: evaluat_db
+    container_name: evaluat
     environment:
-      POSTGRES_USER: evaluat_admin
-      POSTGRES_PASSWORD: evaluat_admin
-      POSTGRES_DB: evaluat_db_test
+      POSTGRES_USER: evaluat-adm
+      POSTGRES_PASSWORD: 910f4444bb75187fcbc4ba493281a15b
+      POSTGRES_DB: postgres
 
     ports:
       - "5432:5432"
@@ -20,4 +20,4 @@ networks:
   evaluat_network:
     driver: bridge
 
-#  psql -U evaluat_admin -d evaluat_db_test
+#  psql -U evaluat-adm -d postgres
