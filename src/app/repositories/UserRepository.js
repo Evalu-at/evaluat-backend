@@ -35,8 +35,6 @@ class UserRepository {
 
         const uu_id = await db.query(query);
 
-        // console.log(`é esse ? ${JSON.stringify(uu_id, null, 2)}`);
-
         return uu_id;
     }
 
