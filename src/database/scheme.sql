@@ -4,5 +4,6 @@ create table if not exists usuario (
 	nome varchar(255) not null,
 	senha varchar(255) not null,
     cargo varchar(255) not null,
+    CHECK (cargo in ('Coordenador','Aluno')),
     primary key (usuario_id)
 );
