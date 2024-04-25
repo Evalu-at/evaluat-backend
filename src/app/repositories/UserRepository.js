@@ -35,7 +35,7 @@ class UserRepository {
 
         const uu_id = await db.query(query);
 
-        return uu_id;
+        return uu_id[0].usuario_id;
     }
 
     async findRole(email) {
@@ -64,7 +64,19 @@ class UserRepository {
         const rows = await db.query(query);
 
         return rows;
+    }
 
+    async createClass({ userID, nome, cadeira, periodo }) {
+
+        const query = {
+            name: "create-class",
+            text: "INSERT INTO turma(coordenador_id, nome, cadeira, periodo) VALUES($1, $2, $3, $4)",
+            values: [userID, nome, cadeira, periodo],
+        };
+
+        const rows = await db.query(query);
+
+        return rows;
     }
 }
 

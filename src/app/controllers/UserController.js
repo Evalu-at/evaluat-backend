@@ -1,10 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserRepository = require("../repositories/UserRepository");
-require('dotenv').config();
+require("dotenv").config();
 
 class UserController {
-
     async show(request, response) {
         /*
             #swagger.tags = ['user']
@@ -82,9 +81,8 @@ class UserController {
             const userRole = await UserRepository.findRole(email);
 
             response.json(userRole);
-
-        } catch(e) {
-            response.status(500).json({ error: "Search Failed"})
+        } catch (e) {
+            response.status(500).json({ error: "Search Failed" });
         }
     }
 
@@ -95,7 +93,7 @@ class UserController {
         */
 
         const { email, senha } = request.body;
-            /*  #swagger.requestBody = {
+        /*  #swagger.requestBody = {
                     required: true,
                     content: {
                         "application/json": {
@@ -111,9 +109,9 @@ class UserController {
             const userMatch = await UserRepository.findEmail(email);
 
             if (!userMatch)
-            return response
-                .status(401)
-                .json({ error: "Authentication Failed" });
+                return response
+                    .status(401)
+                    .json({ error: "Authentication Failed" });
 
             const password = await UserRepository.findPassword(email);
 
@@ -128,12 +126,45 @@ class UserController {
 
             const userUUId = await UserRepository.findId(email);
 
-            const token = jwt.sign({ userId: userUUId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+            const token = jwt.sign(
+                { userId: userUUId },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRES_IN },
+            );
 
             // Verificar tags de seguranca dos cookies!
-            return response.status(200).cookie('access_token', token).json({ success: 'Login success' });
+            return response
+                .status(200)
+                .cookie("access_token", token)
+                .json({ success: "Login success" });
         } catch (e) {
             response.status(500).json({ error: "Login failed" });
+        }
+    }
+
+    async addClass(request, response) {
+        try {
+            const { email, nome, cadeira, periodo } = request.body;
+
+            const role = await UserRepository.findRole(email);
+
+            if (role !== "Coordenador")
+                return response
+                    .status(401)
+                    .json({ error: "User Not Authorized" });
+
+            const userID = await UserRepository.findId(email);
+
+            await UserRepository.createClass({
+                userID,
+                nome,
+                cadeira,
+                periodo,
+            });
+
+            response.status(200).json({ success: "Class Created Succesfully" });
+        } catch (e) {
+            response.status(500).json(e);
         }
     }
 

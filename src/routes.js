@@ -14,6 +14,7 @@ router.get('/', (req, res) => {
 
 router.get('/user/id', UserController.show);
 router.post('/user/add', UserController.add);
+router.post('/user/add/classroom', UserController.addClass);
 router.post('/user/login', UserController.checkValidLogin);
 router.get('/user/logout', Middleware.authorization, UserController.logOut);
 
