@@ -19,22 +19,7 @@ class UserController {
     async add(request, response) {
 
         try {
-<<<<<<< HEAD
-            const { email, nome, senha, cargo } = request.body;
-            /*  #swagger.requestBody = {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/userAddBody"
-                            }
-                        }
-                    }
-                }
-            */
-=======
             const { email, nome, senha } = request.body;
->>>>>>> 51a27c76b05d8ea498c10716661bb20a31eebf58
 
             const userExists = await UserRepository.findEmail(email);
 
@@ -73,20 +58,6 @@ class UserController {
     async checkValidLogin(request, response) {
 
         const { email, senha } = request.body;
-<<<<<<< HEAD
-        /*  #swagger.requestBody = {
-                    required: true,
-                    content: {
-                        "application/json": {
-                            schema: {
-                                $ref: "#/components/schemas/userLoginBody"
-                            }
-                        }
-                    }
-                }
-            */
-=======
->>>>>>> 51a27c76b05d8ea498c10716661bb20a31eebf58
 
         try {
             const userMatch = await UserRepository.findEmail(email);
@@ -125,41 +96,7 @@ class UserController {
         }
     }
 
-<<<<<<< HEAD
-    async addClass(request, response) {
-        try {
-            const { email, nome, cadeira, periodo } = request.body;
-
-            const role = await UserRepository.findRole(email);
-
-            if (role !== "Coordenador")
-                return response
-                    .status(401)
-                    .json({ error: "User Not Authorized" });
-
-            const userID = await UserRepository.findId(email);
-
-            await UserRepository.createClass({
-                userID,
-                nome,
-                cadeira,
-                periodo,
-            });
-
-            response.status(200).json({ success: "Class Created Succesfully" });
-        } catch (e) {
-            response.status(500).json(e);
-        }
-    }
-
-    async formulario(request, response) {
-        /*
-            #swagger.tags = ['adm']
-            #swagger.summary = 'Endpoint in test'
-        */
-=======
     async formulario(response) {
->>>>>>> 51a27c76b05d8ea498c10716661bb20a31eebf58
         return response
             .status(200)
             .json({ message: "testando authorizacao de acesso ao formulario" });
