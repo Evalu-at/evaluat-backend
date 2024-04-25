@@ -5,3 +5,4 @@ create table usuario (
 	senha varchar(255) not null,
     primary key (usuario_id)
 );
+-- precisa adicionar coluna de verified_email, para saber se o email é verificado

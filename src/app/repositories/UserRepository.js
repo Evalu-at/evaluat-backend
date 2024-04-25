@@ -38,6 +38,30 @@ class UserRepository {
         return uu_id;
     }
 
+    async findVerifiedEmail(email) {
+        const query = {
+            name: "fetch-email-id",
+            text: "SELECT email_verificado FROM usuario WHERE email = $1", // Precisa de coluna pra verified email em usuario, return 0 ou 1
+            values: [email],
+        };
+
+        const verifiedEmail = await db.query(query);
+
+        return verifiedEmail;
+    }
+
+    async updateVerifiedEmail(email) {
+        const query = {
+            name: "fetch-email-id",
+            text: "UPDATE usuario SET email_verificado = 1 WHERE email = $1", // Precisa de coluna pra verified email em usuario, return 0 ou 1
+            values: [email],
+        };
+
+        const updatedEmailVerification = await db.query(query);
+
+        return updatedEmailVerification;
+    }
+
     async createUser({ email, nome, senha }) {
 
         const hashPass = await bcrypt.hash(senha, 10);

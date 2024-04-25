@@ -1,9 +1,14 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserRepository = require("../repositories/UserRepository");
+const speakeasy = require('speakeasy');
+const nodemailer =  require('nodemailer');
 require('dotenv').config();
 
 class UserController {
+    constructor() {
+        this.secret;
+    }
 
     async show(request, response) {
         /*
@@ -67,9 +72,9 @@ class UserController {
                 senha,
             });
 
-            response.status(200).json({ success: "Signup success" });
+            return response.status(200).json({ success: "Signup success" });
         } catch (e) {
-            response.status(500).json({ error: "Signup failed" });
+            return response.status(500).json({ error: "Signup failed" });
         }
     }
 
@@ -131,6 +136,76 @@ class UserController {
         return response
             .status(200)
             .json({ message: "testando authorizacao de acesso ao formulario" });
+    }
+
+
+
+    async sendEmail(request, response) {
+        /*
+            #swagger.tags = ['adm']
+            #swagger.summary = 'Endpoint in test'
+        */
+        const { email } = request.body;
+
+        UserController.secret = speakeasy.generateSecret({ length: 20 });
+
+        const totpCode = speakeasy.totp({
+            secret: UserController.secret.base32,
+            encoding: 'base32',
+            digits: 6,
+            time: 60
+        });
+
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.SENDER_EMAIL,
+                pass: process.env.SENDER_PASS
+            },
+        })
+
+        const mail_data = {
+            from: process.env.SENDER_EMAIL,
+            to: "lfaa3@cesar.school",
+            subject: 'Codigo de Verificacao de Email - Evalu.At',
+            text: totpCode
+        }
+
+        transporter.sendMail(mail_data, (err, info) => {
+            if (err) {
+                console.log(err);
+                return response.sendStatus(500);
+            }
+            response.status(200).send({ message: 'Email enviado!', message_id: info.messageId });
+            return next();
+        })
+    }
+
+    async verifyEmail(request, response) {
+        /*
+            #swagger.tags = ['user']
+            #swagger.summary = 'Logout the loged user'
+        */
+
+        const { email, userTotpInput } = request.body;
+
+        const verifiedTotp = speakeasy.totp.verify({
+            secret: UserController.secret.base32,
+            encoding: 'base32',
+            token: userTotpInput,
+            time: 60
+        });
+
+        if(!verifiedTotp)
+            return response.sendStatus(401);
+
+        UserRepository.updateVerifiedEmail(email);
+
+        return response.sendStatus(200);
+
     }
 
     async logOut(request, response) {
