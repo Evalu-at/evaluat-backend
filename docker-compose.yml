@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: evaluat-adm
       POSTGRES_PASSWORD: 910f4444bb75187fcbc4ba493281a15b
-      POSTGRES_DB: postgres
+      POSTGRES_DB: evaluat
 
     ports:
       - "5432:5432"
@@ -20,4 +20,4 @@ networks:
   evaluat_network:
     driver: bridge
 
-#  psql -U evaluat-adm -d postgres
+#  psql -U evaluat-adm -d evaluat
