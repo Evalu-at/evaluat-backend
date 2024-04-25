@@ -35,7 +35,7 @@ class UserRepository {
 
         const uu_id = await db.query(query);
 
-        return uu_id;
+        return uu_id[0].usuario_id;
     }
 
     async findRole(email) {
