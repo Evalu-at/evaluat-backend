@@ -5,23 +5,7 @@ require("dotenv").config();
 
 class UserController {
     async show(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Returns a user by email'
-        */
         const { email } = request.body;
-
-        /*  #swagger.requestBody = {
-                required: true,
-                content: {
-                    "application/json": {
-                        schema: {
-                            $ref: "#/components/schemas/userIdBody"
-                        }
-                    }
-                }
-            }
-        */
 
         const users = await UserRepository.findEmail(email);
 
@@ -33,12 +17,9 @@ class UserController {
     }
 
     async add(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Create a new user'
-        */
 
         try {
+<<<<<<< HEAD
             const { email, nome, senha, cargo } = request.body;
             /*  #swagger.requestBody = {
                     required: true,
@@ -51,6 +32,9 @@ class UserController {
                     }
                 }
             */
+=======
+            const { email, nome, senha } = request.body;
+>>>>>>> 51a27c76b05d8ea498c10716661bb20a31eebf58
 
             const userExists = await UserRepository.findEmail(email);
 
@@ -87,12 +71,9 @@ class UserController {
     }
 
     async checkValidLogin(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Login an existent user'
-        */
 
         const { email, senha } = request.body;
+<<<<<<< HEAD
         /*  #swagger.requestBody = {
                     required: true,
                     content: {
@@ -104,6 +85,8 @@ class UserController {
                     }
                 }
             */
+=======
+>>>>>>> 51a27c76b05d8ea498c10716661bb20a31eebf58
 
         try {
             const userMatch = await UserRepository.findEmail(email);
@@ -142,6 +125,7 @@ class UserController {
         }
     }
 
+<<<<<<< HEAD
     async addClass(request, response) {
         try {
             const { email, nome, cadeira, periodo } = request.body;
@@ -173,16 +157,15 @@ class UserController {
             #swagger.tags = ['adm']
             #swagger.summary = 'Endpoint in test'
         */
+=======
+    async formulario(response) {
+>>>>>>> 51a27c76b05d8ea498c10716661bb20a31eebf58
         return response
             .status(200)
             .json({ message: "testando authorizacao de acesso ao formulario" });
     }
 
-    async logOut(request, response) {
-        /*
-            #swagger.tags = ['user']
-            #swagger.summary = 'Logout the loged user'
-        */
+    async logOut(response) {
 
         return response
             .clearCookie("access_token")
