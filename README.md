@@ -22,9 +22,29 @@ using the <code>swagger</code> framework, it can be accessed by the API route <c
 ## Pre-requisites
 1. Clone or fork this repository
 2. Have <code>node.js</code> installed
+3. Have Docker Desktop
 4. Use the <code>postgres</code> database using a docker
 5. Have the right <code>Pool</code> class credentials to access the docker
 <br><br>
+
+## Configure the Docker Container
+1. Install the Docker Desktop and open it
+2. Go to the searchbar (top of the app) and search for "postgres"
+3. Click on "pull"
+4. Go to images, click on run and then open the opitional settings
+5. Give the container a name (example: evaluat)
+6. Set the Hostport to "5432"
+7. In the Environment variables set like this:
+
+| Variable   | Value |
+| ---------- | ------------- |
+| POSTGRES_USER  | evaluat-adm  |
+| POSTGRES_PASSWORD | <code>check at src\database\index.js</code>|
+
+8. Click on run
+9. Go to containers and start the evaluat container
+10. Now you are ready to run the project
+<br>
 
 ## Run the API
 Install the project dependencies
@@ -39,6 +59,7 @@ Run the project whithout modifing it
 ```
 npm start
 ```
+<br>
 
 
 ## ⚠️ Commom Errors 
@@ -54,7 +75,14 @@ error: password authentication failed for user "<nameuser>"
 ```
 **Solution 1:** If you dont have access to this repository you need to change this database to your personal one<br>
 **Solution 2:** Check the <code>pool</code> credentials and see if matches with the postgres docker that you configured before
-<br><br>
+
+----
+
+```
+error: autentica��o do tipo senha falhou para o usu�rio "evaluat-adm"
+```
+**Solution:** Stop the PostgresSQL services on your windows (you can see it in the task manager <code>crtl + shift + esc</code><br>
+<br>
 
 ## Licences
 _none at the moment_
