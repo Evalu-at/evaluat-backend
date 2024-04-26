@@ -15,9 +15,11 @@ router.get('/', (req, res) => {
 router.get('/user/id', UserController.show);
 router.post('/user/add', UserController.add);
 router.post('/user/login', UserController.checkValidLogin);
+router.get('/user/verify', UserController.sendEmail); // Envio do email
+router.post('/user/verify', UserController.verifyEmail); // Verificar email
 router.get('/user/logout', Middleware.authorization, UserController.logOut);
 
-router.get('/formulario', Middleware.authorization, UserController.formulario);
+router.get('/formulario', Middleware.authorization, Middleware.email_verification, UserController.formulario);
 
 // Test routes
 router.get('/roleTest', UserController.findRole);
