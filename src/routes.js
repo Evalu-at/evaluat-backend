@@ -21,4 +21,7 @@ router.get('/user/logout', Middleware.authorization, UserController.logOut);
 
 router.get('/formulario', Middleware.authorization, Middleware.email_verification, UserController.formulario);
 
+// Test routes
+router.get('/roleTest', UserController.findRole);
+
 module.exports = router;
