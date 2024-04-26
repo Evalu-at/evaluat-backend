@@ -11,8 +11,8 @@ const pool = new Pool({
 pool.connect();
 
 exports.query = async (query, values) => {
-   const { rows } = await pool.query(query, values);
-   return rows;
+  const { rows } = await pool.query(query, values);
+  return rows;
 };
 
 // Foi comentado para nao gerar erro de acesso ao banco de dados em PCs que nao tenham o PostgreSQL
