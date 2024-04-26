@@ -11,3 +11,4 @@ CREATE TABLE IF NOT EXISTS usuario (
     CHECK (cargo IN ('Coordenador','Aluno')),
     PRIMARY KEY (id)
 );
+
