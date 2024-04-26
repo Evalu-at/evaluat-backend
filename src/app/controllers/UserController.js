@@ -167,13 +167,13 @@ class UserController {
             secret: UserController.secret.base32,
             encoding: 'base32',
             digits: 6,
-            time: 60
+            time: 120
         });
 
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             host: 'smtp.gmail.com',
-            port: 465,
+            port: 25,
             secure: true,
             auth: {
                 user: process.env.SENDER_EMAIL,
@@ -183,7 +183,7 @@ class UserController {
 
         const mail_data = {
             from: process.env.SENDER_EMAIL,
-            to: "lfaa3@cesar.school",
+            to: email,
             subject: 'Codigo de Verificacao de Email - Evalu.At',
             text: totpCode
         }
@@ -210,7 +210,7 @@ class UserController {
             secret: UserController.secret.base32,
             encoding: 'base32',
             token: userTotpInput,
-            time: 60
+            time: 120
         });
 
         if(!verifiedTotp)
