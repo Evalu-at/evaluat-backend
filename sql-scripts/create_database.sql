@@ -1,4 +1,3 @@
-
 \c evaluat;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -9,6 +8,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     nome VARCHAR(255) NOT NULL,
     senha VARCHAR(255) NOT NULL,
     cargo VARCHAR(255) NOT NULL,
+    email_verificado INT DEFAULT 0 NOT NULL,
     CHECK (cargo IN ('Coordenador','Aluno')),
     PRIMARY KEY (id)
 );
@@ -22,3 +22,5 @@ CREATE TABLE IF NOT EXISTS turma (
 	PRIMARY KEY (turma_id),
     FOREIGN KEY (coordenador_id) REFERENCES usuario(id)
 );
+
+
