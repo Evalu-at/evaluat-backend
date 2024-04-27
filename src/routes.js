@@ -17,6 +17,7 @@ router.post('/user/add', UserController.add);
 router.post('/user/add/classroom', UserController.addClass);
 router.post('/user/login', UserController.checkValidLogin);
 router.get('/user/logout', Middleware.authorization, UserController.logOut);
+router.post('/user/delete/classroom', UserController.deleteClass);
 
 router.get('/formulario', Middleware.authorization, UserController.formulario);
 

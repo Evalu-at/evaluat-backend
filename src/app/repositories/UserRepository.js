@@ -1,3 +1,4 @@
+const { cos } = require("prelude-ls");
 const db = require("../../database");
 const bcrypt = require("bcrypt");
 
@@ -29,13 +30,13 @@ class UserRepository {
     async findId(email) {
         const query = {
             name: "fetch-email-id",
-            text: "SELECT usuario_id FROM usuario WHERE email = $1",
+            text: "SELECT id FROM usuario WHERE email = $1",
             values: [email],
         };
 
         const uu_id = await db.query(query);
 
-        return uu_id[0].usuario_id;
+        return uu_id[0].id;
     }
 
     async findRole(email) {
@@ -48,6 +49,18 @@ class UserRepository {
         const role = await db.query(query);
 
         return role[0].cargo;
+    }
+
+    async findClass(nome, coordenador_id) {
+        const query = {
+            nome: "fetch-class-id",
+            text: "select turma_id from turma where nome = $1 and coordenador_id = $2",
+            values: [nome, coordenador_id],
+        }
+
+        const id = await db.query(query);
+
+        return id[0].turma_id;
     }
 
     async createUser({ email, nome, senha, cargo }) {
@@ -72,6 +85,18 @@ class UserRepository {
             name: "create-class",
             text: "INSERT INTO turma(coordenador_id, nome, cadeira, periodo) VALUES($1, $2, $3, $4)",
             values: [userID, nome, cadeira, periodo],
+        };
+
+        const rows = await db.query(query);
+
+        return rows;
+    }
+
+    async deleteClass(id) {
+        const query = {
+            name: "delete-class",
+            text: "DELETE FROM turma where turma_id = $1",
+            values: [id],
         };
 
         const rows = await db.query(query);

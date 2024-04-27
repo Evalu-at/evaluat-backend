@@ -164,7 +164,31 @@ class UserController {
 
             response.status(200).json({ success: "Class Created Succesfully" });
         } catch (e) {
-            response.status(500).json(e);
+            response.status(500).json({ error: "Failed to Create Class"});
+        }
+    }
+
+    async deleteClass(request, response) {
+        try {
+            const { email, nome } = request.body;
+
+            const role = await UserRepository.findRole(email);
+
+            if (role !== "Coordenador")
+                return response
+                    .status(401)
+                    .json({ error: "User Not Authorized" });
+
+            const userId = await UserRepository.findId(email);
+
+            const classId = await UserRepository.findClass(nome, userId);
+
+            await UserRepository.deleteClass(classId);
+
+            response.status(200).json({ success: "Class Deleted" })
+
+        } catch (e) {
+            response.status(500).json({ error: "Failed to Delete Class" });
         }
     }
 

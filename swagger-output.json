@@ -38,6 +38,10 @@
     },
     "/user/id": {
       "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Returns a user by email",
         "description": "",
         "responses": {
           "200": {
@@ -46,11 +50,25 @@
           "404": {
             "description": "Not Found"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userIdBody"
+              }
+            }
+          }
         }
       }
     },
     "/user/add": {
       "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create a new user",
         "description": "",
         "responses": {
           "200": {
@@ -64,21 +82,11 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "nome": {
-                    "example": "any"
-                  },
-                  "senha": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/userAddBody"
               }
             }
           }
@@ -86,16 +94,6 @@
       }
     },
     "/user/add/classroom": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/user/login": {
       "post": {
         "description": "",
         "responses": {
@@ -118,7 +116,13 @@
                   "email": {
                     "example": "any"
                   },
-                  "senha": {
+                  "nome": {
+                    "example": "any"
+                  },
+                  "cadeira": {
+                    "example": "any"
+                  },
+                  "periodo": {
                     "example": "any"
                   }
                 }
@@ -128,8 +132,42 @@
         }
       }
     },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Login an existent user",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userLoginBody"
+              }
+            }
+          }
+        }
+      }
+    },
     "/user/logout": {
       "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logout the loged user",
         "description": "",
         "responses": {
           "403": {
@@ -140,23 +178,17 @@
     },
     "/formulario": {
       "get": {
-        "description": "",
-        "responses": {
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/roleTest": {
-      "get": {
+        "tags": [
+          "adm"
+        ],
+        "summary": "Endpoint in test",
         "description": "",
         "responses": {
           "200": {
             "description": "OK"
           },
-          "500": {
-            "description": "Internal Server Error"
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
