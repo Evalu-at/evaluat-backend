@@ -21,4 +21,3 @@ networks:
     driver: bridge
 
 #  psql -U evaluat-adm -d evaluat
-

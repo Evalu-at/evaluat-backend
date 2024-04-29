@@ -14,13 +14,17 @@ CREATE TABLE IF NOT EXISTS usuario (
 );
 
 CREATE TABLE IF NOT EXISTS turma (
-	turma_id UUID DEFAULT uuid_generate_v4(),
-    coordenador_id uuid,
+	id UUID DEFAULT uuid_generate_v4(),
+    coordenador_id UUID,
     nome varchar(255) NOT NULL,
-	cadeira varchar(255) NOT NULL,
 	periodo int NOT NULL,
-	PRIMARY KEY (turma_id),
+	PRIMARY KEY (id),
     FOREIGN KEY (coordenador_id) REFERENCES usuario(id)
 );
 
-
+CREATE TABLE IF NOT EXISTS turma_usuario (
+    turma_id UUID,
+    usuario_id UUID,
+    FOREIGN KEY (turma_id) REFERENCES turma(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);

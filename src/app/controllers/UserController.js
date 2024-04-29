@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserRepository = require("../repositories/UserRepository");
-const speakeasy = require('speakeasy');
-const nodemailer =  require('nodemailer');
-require('dotenv').config();
+const speakeasy = require("speakeasy");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 class UserController {
     constructor() {
@@ -150,7 +150,7 @@ class UserController {
 
     async addClass(request, response) {
         try {
-            const { email, nome, cadeira, periodo } = request.body;
+            const { email, nome, periodo } = request.body;
 
             const role = await UserRepository.findRole(email);
 
@@ -161,16 +161,28 @@ class UserController {
 
             const userID = await UserRepository.findId(email);
 
+            var classId = await UserRepository.findClass(nome, userID);
+
+            if (!(!Array.isArray(classId) || !classId.length)) {
+                return response.status(401).json({ error: "Class Exists" });
+            }
+
             await UserRepository.createClass({
                 userID,
                 nome,
-                cadeira,
                 periodo,
             });
 
-            response.status(200).json({ success: "Class Created Succesfully" });
+            classId = await UserRepository.findClass(nome, userID);
+
+            response
+                .status(200)
+                .json({
+                    success: "Class Created Succesfully",
+                    classroom_id: classId[0].id,
+                });
         } catch (e) {
-            response.status(500).json({ error: "Failed to Create Class"});
+            response.status(500).json(e);
         }
     }
 
@@ -189,10 +201,9 @@ class UserController {
 
             const classId = await UserRepository.findClass(nome, userId);
 
-            await UserRepository.deleteClass(classId);
+            await UserRepository.deleteClass(classId[0].id);
 
-            response.status(200).json({ success: "Class Deleted" })
-
+            response.status(200).json({ success: "Class Deleted" });
         } catch (e) {
             response.status(500).json({ error: "Failed to Delete Class" });
         }
@@ -208,8 +219,6 @@ class UserController {
             .json({ message: "testando authorizacao de acesso ao formulario" });
     }
 
-
-
     async sendEmail(request, response) {
         /*
             #swagger.tags = ['adm']
@@ -221,37 +230,42 @@ class UserController {
 
         const totpCode = speakeasy.totp({
             secret: UserController.secret.base32,
-            encoding: 'base32',
+            encoding: "base32",
             digits: 6,
-            time: 120
+            time: 120,
         });
 
         const transporter = nodemailer.createTransport({
-            service: 'Gmail',
-            host: 'smtp.gmail.com',
+            service: "Gmail",
+            host: "smtp.gmail.com",
             port: 25,
             secure: true,
             auth: {
                 user: process.env.SENDER_EMAIL,
-                pass: process.env.SENDER_PASS
+                pass: process.env.SENDER_PASS,
             },
-        })
+        });
 
         const mail_data = {
             from: process.env.SENDER_EMAIL,
             to: email,
-            subject: 'Codigo de Verificacao de Email - Evalu.At',
-            text: totpCode
-        }
+            subject: "Codigo de Verificacao de Email - Evalu.At",
+            text: totpCode,
+        };
 
         transporter.sendMail(mail_data, (err, info) => {
             if (err) {
                 console.log(err);
                 return response.sendStatus(500);
             }
-            response.status(200).send({ message: 'Email enviado!', message_id: info.messageId });
+            response
+                .status(200)
+                .send({
+                    message: "Email enviado!",
+                    message_id: info.messageId,
+                });
             return next();
-        })
+        });
     }
 
     async verifyEmail(request, response) {
@@ -264,18 +278,16 @@ class UserController {
 
         const verifiedTotp = speakeasy.totp.verify({
             secret: UserController.secret.base32,
-            encoding: 'base32',
+            encoding: "base32",
             token: userTotpInput,
-            time: 120
+            time: 120,
         });
 
-        if(!verifiedTotp)
-            return response.sendStatus(401);
+        if (!verifiedTotp) return response.sendStatus(401);
 
         UserRepository.updateVerifiedEmail(email);
 
         return response.sendStatus(200);
-
     }
 
     async logOut(request, response) {

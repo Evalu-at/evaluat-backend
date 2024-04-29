@@ -102,13 +102,13 @@ class UserRepository {
     async findClass(nome, coordenador_id) {
         const query = {
             nome: "fetch-class-id",
-            text: "select turma_id from turma where nome = $1 and coordenador_id = $2",
+            text: "select id from turma where nome = $1 and coordenador_id = $2",
             values: [nome, coordenador_id],
         }
 
         const id = await db.query(query);
 
-        return id[0].turma_id;
+        return id;
     }
 
     async createUser({ email, nome, senha, cargo }) {
@@ -126,12 +126,12 @@ class UserRepository {
         return rows;
     }
 
-    async createClass({ userID, nome, cadeira, periodo }) {
+    async createClass({ userID, nome, periodo }) {
 
         const query = {
             name: "create-class",
-            text: "INSERT INTO turma(coordenador_id, nome, cadeira, periodo) VALUES($1, $2, $3, $4)",
-            values: [userID, nome, cadeira, periodo],
+            text: "INSERT INTO turma(coordenador_id, nome, periodo) VALUES($1, $2, $3)",
+            values: [userID, nome, periodo],
         };
 
         const rows = await db.query(query);
