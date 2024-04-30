@@ -222,6 +222,14 @@ class UserController {
 
     }
 
+    async getFeelings(request) {
+        const { email, sentimento } = request.body;
+
+        UserRepository.addFeeling(sentimento, email) // FRONT DEFINIR SE O EMAIL É "ANONIMO" OU O EMAIL REAL!!! ---------
+
+        return response.sendStatus(200);
+    }
+
     async logOut(request, response) {
         /*
             #swagger.tags = ['user']
