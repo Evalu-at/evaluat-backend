@@ -312,7 +312,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/index",
-    "dev": "nodemon ./src/index",
+    "dev": "nodemon -L --inspect=0.0.0.0:9222 ./src/index",
     "prepare": "husky && husky install",
     "check": "eslint . --ext .js",
     "swagger": "node swagger.js"
