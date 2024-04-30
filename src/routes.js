@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const cookieParser = require('cookie-parser');
 
+const ClassController = require('./app/controllers/ClassController')
 const UserController = require('./app/controllers/UserController');
 const Middleware = require('./app/middlewares/Middleware');
 
@@ -14,12 +15,14 @@ router.get('/', (req, res) => {
 
 router.get('/user/id', UserController.show);
 router.post('/user/add', UserController.add);
-router.post('/user/add/classroom', UserController.addClass);
 router.post('/user/login', UserController.checkValidLogin);
 router.get('/user/verify', UserController.sendEmail); // Envio do email
 router.post('/user/verify', UserController.verifyEmail); // Verificar email
 router.get('/user/logout', Middleware.authorization, UserController.logOut);
-router.post('/user/delete/classroom', UserController.deleteClass);
+
+router.post('/classroom/add-student', ClassController.addStudent);
+router.post('/classroom/delete', ClassController.deleteClass);
+router.post('/classroom/add', ClassController.addClass);
 
 router.get('/formulario', Middleware.authorization, Middleware.email_verification, UserController.formulario);
 
