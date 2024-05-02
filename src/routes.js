@@ -21,6 +21,7 @@ router.post('/user/verify', UserController.verifyEmail); // Verificar email
 router.get('/user/logout', Middleware.authorization, UserController.logOut);
 
 router.post('/classroom/add-student', ClassController.addStudent);
+router.post('/classroom/remove-student', ClassController.removeStudent);
 router.post('/classroom/delete', ClassController.deleteClass);
 router.post('/classroom/add', ClassController.addClass);
 

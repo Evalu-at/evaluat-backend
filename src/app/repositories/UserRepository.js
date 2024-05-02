@@ -99,7 +99,6 @@ class UserRepository {
         return role[0].cargo;
     }
 
-    // Fix
     async findCoordClass(nome, coordenador_id) {
         const query = {
             nome: "fetch-class-id",
@@ -109,10 +108,9 @@ class UserRepository {
 
         const id = await db.query(query);
 
-        return id;
+        return id[0].id;
     }
 
-    // Fix (merge ^)
     async findClassId(classId) {
         const query = {
             nome: "find-classroom",
@@ -123,6 +121,17 @@ class UserRepository {
         const id = await db.query(query);
 
         return id[0].exists;
+    }
+
+    async checkIfClass() {
+        const query = {
+            nome: "check-classroom",
+            text: "select EXISTS (SELECT * FROM turma)::int",
+        }
+
+        const check = await db.query(query);
+
+        return check;
     }
 
     async createUser({ email, nome, senha, cargo }) {
@@ -153,12 +162,24 @@ class UserRepository {
         return rows;
     }
 
-    async createStudent({ classId, userId}) {
+    async createStudent({ classId, userId }) {
         const query = {
             nome: "create-student",
             text: "INSERT INTO turma_usuario(turma_id, usuario_id) VALUES($1, $2)",
             values: [classId, userId],
         };
+
+        const rows = await db.query(query);
+
+        return rows;
+    }
+
+    async removeStudent({ classId, userId }) {
+        const query = {
+            nome: "remove-student",
+            text: "DELETE FROM turma_usuario WHERE turma_id = $1 AND usuario_id = $2",
+            values: [classId, userId]
+        }
 
         const rows = await db.query(query);
 

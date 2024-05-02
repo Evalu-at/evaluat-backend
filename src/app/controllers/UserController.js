@@ -1,9 +1,9 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const UserRepository = require("../repositories/UserRepository");
-const speakeasy = require("speakeasy");
-const nodemailer = require("nodemailer");
-require("dotenv").config();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const UserRepository = require('../repositories/UserRepository');
+const speakeasy = require('speakeasy');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 class UserController {
     constructor() {
@@ -20,9 +20,9 @@ class UserController {
         /*  #swagger.requestBody = {
                 required: true,
                 content: {
-                    "application/json": {
+                    'application/json': {
                         schema: {
-                            $ref: "#/components/schemas/userIdBody"
+                            $ref: '#/components/schemas/userIdBody'
                         }
                     }
                 }
@@ -32,7 +32,7 @@ class UserController {
         const users = await UserRepository.findEmail(email);
 
         if (!users) {
-            return response.status(404).json({ error: "User not found" });
+            return response.status(404).json({ error: 'User not found' });
         }
 
         response.json(users);
@@ -49,9 +49,9 @@ class UserController {
             /*  #swagger.requestBody = {
                     required: true,
                     content: {
-                        "application/json": {
+                        'application/json': {
                             schema: {
-                                $ref: "#/components/schemas/userAddBody"
+                                $ref: '#/components/schemas/userAddBody'
                             }
                         }
                     }
@@ -63,7 +63,7 @@ class UserController {
             if (userExists) {
                 return response
                     .status(400)
-                    .json({ error: "This email already in use" });
+                    .json({ error: 'This email already in use' });
             }
 
             // cargo { coordenador OU aluno }
@@ -74,9 +74,9 @@ class UserController {
                 cargo,
             });
 
-            return response.status(200).json({ success: "Signup success" });
+            return response.status(200).json({ success: 'Signup success' });
         } catch (e) {
-            return response.status(500).json({ error: "Signup failed" });
+            return response.status(500).json({ error: 'Signup failed' });
         }
     }
 
@@ -88,7 +88,7 @@ class UserController {
 
             response.json(userRole);
         } catch (e) {
-            response.status(500).json({ error: "Search Failed" });
+            response.status(500).json({ error: 'Search Failed' });
         }
     }
 
@@ -102,9 +102,9 @@ class UserController {
         /*  #swagger.requestBody = {
                     required: true,
                     content: {
-                        "application/json": {
+                        'application/json': {
                             schema: {
-                                $ref: "#/components/schemas/userLoginBody"
+                                $ref: '#/components/schemas/userLoginBody'
                             }
                         }
                     }
@@ -117,7 +117,7 @@ class UserController {
             if (!userMatch)
                 return response
                     .status(401)
-                    .json({ error: "Authentication Failed" });
+                    .json({ error: 'Authentication Failed' });
 
             const password = await UserRepository.findPassword(email);
 
@@ -128,7 +128,7 @@ class UserController {
             if (!passwordMatch)
                 return response
                     .status(401)
-                    .json({ error: "Authentication Failed" });
+                    .json({ error: 'Authentication Failed' });
 
             const userUUId = await UserRepository.findId(email);
 
@@ -141,10 +141,10 @@ class UserController {
             // Verificar tags de seguranca dos cookies!
             return response
                 .status(200)
-                .cookie("access_token", token)
-                .json({ success: "Login success" });
+                .cookie('access_token', token)
+                .json({ success: 'Login success' });
         } catch (e) {
-            response.status(500).json({ error: "Login failed" });
+            response.status(500).json({ error: 'Login failed' });
         }
     }
 
@@ -155,7 +155,7 @@ class UserController {
         */
         return response
             .status(200)
-            .json({ message: "testando authorizacao de acesso ao formulario" });
+            .json({ message: 'testando authorizacao de acesso ao formulario' });
     }
 
     async sendEmail(request, response) {
@@ -169,14 +169,14 @@ class UserController {
 
         const totpCode = speakeasy.totp({
             secret: UserController.secret.base32,
-            encoding: "base32",
+            encoding: 'base32',
             digits: 6,
             time: 120,
         });
 
         const transporter = nodemailer.createTransport({
-            service: "Gmail",
-            host: "smtp.gmail.com",
+            service: 'Gmail',
+            host: 'smtp.gmail.com',
             port: 25,
             secure: true,
             auth: {
@@ -188,7 +188,7 @@ class UserController {
         const mail_data = {
             from: process.env.SENDER_EMAIL,
             to: email,
-            subject: "Codigo de Verificacao de Email - Evalu.At",
+            subject: 'Codigo de Verificacao de Email - Evalu.At',
             text: totpCode,
         };
 
@@ -200,7 +200,7 @@ class UserController {
             response
                 .status(200)
                 .send({
-                    message: "Email enviado!",
+                    message: 'Email enviado!',
                     message_id: info.messageId,
                 });
             return next();
@@ -217,7 +217,7 @@ class UserController {
 
         const verifiedTotp = speakeasy.totp.verify({
             secret: UserController.secret.base32,
-            encoding: "base32",
+            encoding: 'base32',
             token: userTotpInput,
             time: 120,
         });
@@ -236,9 +236,9 @@ class UserController {
         */
 
         return response
-            .clearCookie("access_token")
+            .clearCookie('access_token')
             .status(200)
-            .json({ success: "Logout success" });
+            .json({ success: 'Logout success' });
     }
 }
 

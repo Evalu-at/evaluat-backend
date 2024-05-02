@@ -8,6 +8,7 @@ class ClassController {
     async addClass(request, response) {
         try {
             const { email, nome, periodo } = request.body
+            var classId;
 
             const role = await UserRepository.findRole(email)
 
@@ -17,11 +18,17 @@ class ClassController {
                     .json({ error: 'User Not Authorized' })
 
             const userID = await UserRepository.findId(email)
+            console.log(userID)
 
-            var classId = await UserRepository.findCoordClass(nome, userID)
+            if (UserRepository.checkIfClass() === 1) {
+                classId = await UserRepository.findCoordClass(nome, userID)
+                console.log(classId)
 
-            if (!(!Array.isArray(classId) || !classId.length)) {
-                return response.status(401).json({ error: 'Class Exists' })
+                if (!(!Array.isArray(classId) || !classId.length)) {
+                    return response
+                        .status(401)
+                        .json({ error: 'Class Already Exists' })
+                }
             }
 
             await UserRepository.createClass({
@@ -34,10 +41,10 @@ class ClassController {
 
             response.status(200).json({
                 success: 'Class Created Succesfully',
-                classroom_id: classId[0].id,
+                classroom_id: classId,
             })
         } catch (e) {
-            response.status(500).json(e)
+            response.status(500).json({ error: 'Failed to Create A Class' })
         }
     }
 
@@ -56,7 +63,7 @@ class ClassController {
 
             const classId = await UserRepository.findCoordClass(nome, userId)
 
-            await UserRepository.deleteClass(classId[0].id)
+            await UserRepository.deleteClass(classId)
 
             response.status(200).json({ success: 'Class Deleted' })
         } catch (e) {
@@ -68,26 +75,52 @@ class ClassController {
         try {
             const { email, classId } = request.body
 
-            const aClassroom = await UserRepository.findClassId(classId);
+            const aClassroom = await UserRepository.findClassId(classId)
             if (!aClassroom) {
-                return response.status(401).json({ error: 'Class Not Found' });
+                return response.status(401).json({ error: 'Class Not Found' })
             }
 
-            const aUser = await UserRepository.findEmail(email);
+            const aUser = await UserRepository.findEmail(email)
             if (!aUser) {
-                return response.status(401).json({ error: 'User Not Found' });
+                return response.status(401).json({ error: 'User Not Found' })
             }
 
-            const userId = await UserRepository.findId(email);
-
-            console.log()
+            const userId = await UserRepository.findId(email)
 
             await UserRepository.createStudent({
+                classId,
+                userId,
+            })
+
+            response.status(200).json({ success: 'Student Added Succesfily' })
+        } catch (e) {
+            response.status(500).json({ error: 'Failed to Add Student' })
+        }
+    }
+
+    async removeStudent(request, response) {
+        try {
+            const { email, classId } = request.body
+
+            const aClassroom = await UserRepository.findClassId(classId)
+            if (!aClassroom) {
+                return response.status(401).json({ error: 'Class Not Found' })
+            }
+
+            const aUser = await UserRepository.findEmail(email)
+            if (!aUser) {
+                return response.status(401).json({ error: 'User Not Found' })
+            }
+
+            const userId = await UserRepository.findId(email)
+
+            await UserRepository.removeStudent({
                 classId,
                 userId
             });
 
-            response.status(200).json({ success: "Student Added Succesfily" })
+            response.status(200).json({ success: "Student Removed" });
+
         } catch (e) {
             response.status(500).json(e)
         }
