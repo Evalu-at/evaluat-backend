@@ -88,6 +88,7 @@ class UserRepository {
     }
 
     async findRole(email) {
+
         const query = {
             name: "fetch-role",
             text: "SELECT cargo FROM usuario WHERE email = $1",
@@ -95,7 +96,6 @@ class UserRepository {
         };
 
         const role = await db.query(query);
-
         return role[0].cargo;
     }
 

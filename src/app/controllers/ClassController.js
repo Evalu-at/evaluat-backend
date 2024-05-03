@@ -19,11 +19,9 @@ class ClassController {
                     .json({ error: 'User Not Authorized' })
 
             const userID = await UserRepository.findId(email)
-            console.log(userID)
 
-            if (UserRepository.checkIfClass() === 1) {
+            if (ClassRepository.checkIfClass() === 1) {
                 classId = await ClassRepository.findCoordClass(nome, userID)
-                console.log(classId)
 
                 if (!(!Array.isArray(classId) || !classId.length)) {
                     return response
@@ -32,11 +30,11 @@ class ClassController {
                 }
             }
 
-            await ClassRepository.createClass({
+            await ClassRepository.createClass(
                 userID,
                 nome,
                 periodo,
-            })
+            )
 
             classId = await ClassRepository.findCoordClass(nome, userID)
 
@@ -45,7 +43,7 @@ class ClassController {
                 classroom_id: classId,
             })
         } catch (e) {
-            response.status(500).json({ error: 'Failed to Create A Class' })
+            response.status(500).json({ error: "Failed to Create a Class" })
         }
     }
 
@@ -88,10 +86,10 @@ class ClassController {
 
             const userId = await UserRepository.findId(email)
 
-            await ClassRepository.createStudent({
+            await ClassRepository.createStudent(
                 classId,
                 userId,
-            })
+            )
 
             response.status(200).json({ success: 'Student Added Succesfily' })
         } catch (e) {
@@ -115,10 +113,10 @@ class ClassController {
 
             const userId = await UserRepository.findId(email)
 
-            await ClassRepository.removeStudent({
+            await ClassRepository.removeStudent(
                 classId,
                 userId
-            });
+            );
 
             response.status(200).json({ success: "Student Removed" });
 

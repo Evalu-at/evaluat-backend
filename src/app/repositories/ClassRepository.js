@@ -27,7 +27,6 @@ class ClassRepository {
         const id = await db.query(query);
 
         return id[0].id;
-
     }
 
     async findCoordClass(nome, coordenador_id) {
@@ -103,9 +102,10 @@ class ClassRepository {
     }
 
     async deleteClass(id) {
+
         const query = {
             name: "delete-class",
-            text: "DELETE FROM turma where turma_id = $1",
+            text: "DELETE FROM turma where id = $1",
             values: [id],
         };
 
