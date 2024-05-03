@@ -28,3 +28,10 @@ CREATE TABLE IF NOT EXISTS turma_usuario (
     FOREIGN KEY (turma_id) REFERENCES turma(id),
     FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
+
+CREATE TABLE IF NOT EXISTS sentimento (
+	turma_id UUID,
+	sentimento VARCHAR(255),
+	email VARCHAR(255),
+	FOREIGN KEY (turma_id) REFERENCES turma(id)
+);

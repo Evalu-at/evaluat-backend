@@ -53,7 +53,7 @@ class UserRepository {
 
     async updateVerifiedEmail(email) {
         const query = {
-            name: "fetch-email-id",
+            name: "update-email-verified",
             text: "UPDATE usuario SET email_verificado = 1 WHERE email = $1", // Precisa de coluna pra verified email em usuario, return 0 ou 1
             values: [email],
         };
@@ -61,6 +61,18 @@ class UserRepository {
         const updatedEmailVerification = await db.query(query);
 
         return updatedEmailVerification;
+    }
+
+    async addFeeling(email, sentimento) {
+        const query = {
+            name: "update-feeling-id",
+            text: "INSERT INTO sentimento(email, sentimento) VALUES($1, $2)", // Precisa de coluna pra verified email em usuario, return 0 ou 1
+            values: [email, sentimento],
+        };
+
+        const addFeeling = await db.query(query);
+
+        return addFeeling;
     }
 
     async findVerifiedEmail(email) {
