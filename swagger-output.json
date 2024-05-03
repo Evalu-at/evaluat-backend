@@ -137,6 +137,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "nome": {
+                    "example": "any"
+                  },
                   "email": {
                     "example": "any"
                   },
