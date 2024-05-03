@@ -2,13 +2,9 @@ version: '3.8'
 
 services:
     db:
+        env_file: .env
         image: postgres
         container_name: evaluat-db
-        environment:
-            POSTGRES_USER: evaluat-adm
-            POSTGRES_PASSWORD: 910f4444bb75187fcbc4ba493281a15b
-            POSTGRES_DB: evaluat
-
         ports:
             - '5432:5432'
         volumes:
