@@ -222,10 +222,10 @@ class UserController {
 
     }
 
-    async getFeelings(request) {
+    async getFeelings(request, response) {
         const { email, sentimento } = request.body;
 
-        UserRepository.addFeeling(sentimento, email) // FRONT DEFINIR SE O EMAIL É "ANONIMO" OU O EMAIL REAL!!! ---------
+        UserRepository.addFeeling(email, sentimento) // FRONT DEFINIR SE O EMAIL É "ANONIMO" OU O EMAIL REAL!!! ---------
 
         return response.sendStatus(200);
     }
