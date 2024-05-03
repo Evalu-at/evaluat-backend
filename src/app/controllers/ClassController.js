@@ -1,4 +1,5 @@
-const UserRepository = require('../repositories/UserRepository')
+const ClassRepository = require('../repositories/ClassRepository');
+const UserRepository = require('../repositories/UserRepository');
 
 class ClassController {
     constructor() {
@@ -21,7 +22,7 @@ class ClassController {
             console.log(userID)
 
             if (UserRepository.checkIfClass() === 1) {
-                classId = await UserRepository.findCoordClass(nome, userID)
+                classId = await ClassRepository.findCoordClass(nome, userID)
                 console.log(classId)
 
                 if (!(!Array.isArray(classId) || !classId.length)) {
@@ -31,13 +32,13 @@ class ClassController {
                 }
             }
 
-            await UserRepository.createClass({
+            await ClassRepository.createClass({
                 userID,
                 nome,
                 periodo,
             })
 
-            classId = await UserRepository.findCoordClass(nome, userID)
+            classId = await ClassRepository.findCoordClass(nome, userID)
 
             response.status(200).json({
                 success: 'Class Created Succesfully',
@@ -61,9 +62,9 @@ class ClassController {
 
             const userId = await UserRepository.findId(email)
 
-            const classId = await UserRepository.findCoordClass(nome, userId)
+            const classId = await ClassRepository.findCoordClass(nome, userId)
 
-            await UserRepository.deleteClass(classId)
+            await ClassRepository.deleteClass(classId)
 
             response.status(200).json({ success: 'Class Deleted' })
         } catch (e) {
@@ -75,7 +76,7 @@ class ClassController {
         try {
             const { email, classId } = request.body
 
-            const aClassroom = await UserRepository.findClassId(classId)
+            const aClassroom = await ClassRepository.findClassId(classId)
             if (!aClassroom) {
                 return response.status(401).json({ error: 'Class Not Found' })
             }
@@ -87,7 +88,7 @@ class ClassController {
 
             const userId = await UserRepository.findId(email)
 
-            await UserRepository.createStudent({
+            await ClassRepository.createStudent({
                 classId,
                 userId,
             })
@@ -102,7 +103,7 @@ class ClassController {
         try {
             const { email, classId } = request.body
 
-            const aClassroom = await UserRepository.findClassId(classId)
+            const aClassroom = await ClassRepository.findClassId(classId)
             if (!aClassroom) {
                 return response.status(401).json({ error: 'Class Not Found' })
             }
@@ -114,7 +115,7 @@ class ClassController {
 
             const userId = await UserRepository.findId(email)
 
-            await UserRepository.removeStudent({
+            await ClassRepository.removeStudent({
                 classId,
                 userId
             });
@@ -124,6 +125,16 @@ class ClassController {
         } catch (e) {
             response.status(500).json(e)
         }
+    }
+
+    async getFeelings(request, response) {
+        const { nome, email, sentimento } = request.body;
+
+        const classId = await ClassRepository.findClassByName(nome);
+
+        ClassRepository.addFeeling(classId, sentimento, email) // FRONT DEFINIR SE O EMAIL É "ANONIMO" OU O EMAIL REAL!!! ---------
+
+        return response.sendStatus(200);
     }
 }
 

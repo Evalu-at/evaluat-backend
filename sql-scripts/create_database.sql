@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS usuario (
 CREATE TABLE IF NOT EXISTS turma (
 	id UUID DEFAULT uuid_generate_v4(),
     coordenador_id UUID,
-    nome varchar(255) NOT NULL,
+    nome varchar(255) UNIQUE NOT NULL,
 	periodo int NOT NULL,
 	PRIMARY KEY (id),
     FOREIGN KEY (coordenador_id) REFERENCES usuario(id)
