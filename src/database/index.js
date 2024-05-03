@@ -1,11 +1,12 @@
 const { Pool } = require('pg');
+require('dotenv').config(); 
 
 const pool = new Pool({
-    user: 'evaluat-adm',
-    host: 'db',
-    database: 'evaluat',
-    password: '910f4444bb75187fcbc4ba493281a15b',
-    port: 5432
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
 pool.connect();
@@ -14,5 +15,3 @@ exports.query = async (query, values) => {
   const { rows } = await pool.query(query, values);
   return rows;
 };
-
-// Foi comentado para nao gerar erro de acesso ao banco de dados em PCs que nao tenham o PostgreSQL
