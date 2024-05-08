@@ -10,9 +10,9 @@ class UserRepository {
             values: [email],
         };
 
-        const rows = await db.query(query);
+        const mail = await db.query(query);
 
-        return rows[0].exists;
+        return mail[0].exists;
     }
 
     async findPassword(email) {
@@ -58,9 +58,7 @@ class UserRepository {
             values: [email],
         };
 
-        const updatedEmailVerification = await db.query(query);
-
-        return updatedEmailVerification;
+        await db.query(query);
     }
 
     async findVerifiedEmail(email) {
@@ -82,9 +80,7 @@ class UserRepository {
             values: [email],
         };
 
-        const updatedEmailVerification = await db.query(query);
-
-        return updatedEmailVerification;
+        await db.query(query);
     }
 
     async findRole(email) {
@@ -108,10 +104,7 @@ class UserRepository {
             values: [email, nome, hashPass, cargo],
         };
 
-
-        const rows = await db.query(query);
-
-        return rows;
+        await db.query(query);
     }
 
 }

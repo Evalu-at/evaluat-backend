@@ -2,7 +2,7 @@ const db = require("../../database");
 
 class ClassRepository {
     constructor() {
-        this.super;
+        
     }
 
     async addFeeling(classId, sentimento,  email) {
@@ -12,9 +12,7 @@ class ClassRepository {
             values: [classId, sentimento, email],
         };
 
-        const row = await db.query(query);
-
-        return row;
+        await db.query(query);
     }
 
     async findClassByName(nome) {
@@ -72,9 +70,7 @@ class ClassRepository {
             values: [userID, nome, periodo],
         };
 
-        const rows = await db.query(query);
-
-        return rows;
+        await db.query(query);
     }
 
     async createStudent(classId, userId) {
@@ -84,9 +80,7 @@ class ClassRepository {
             values: [classId, userId],
         };
 
-        const rows = await db.query(query);
-
-        return rows;
+        await db.query(query);
     }
 
     async removeStudent(classId, userId) {
@@ -96,9 +90,7 @@ class ClassRepository {
             values: [classId, userId]
         }
 
-        const rows = await db.query(query);
-
-        return rows;
+        await db.query(query);
     }
 
     async deleteClass(id) {
@@ -109,9 +101,7 @@ class ClassRepository {
             values: [id],
         };
 
-        const rows = await db.query(query);
-
-        return rows;
+        await db.query(query);
     }
 }
 

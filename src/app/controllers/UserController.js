@@ -200,7 +200,7 @@ class UserController {
             response
                 .status(200)
                 .send({
-                    message: 'Email enviado!',
+                    message: 'Email Sent',
                     message_id: info.messageId,
                 });
             return next();
@@ -229,7 +229,7 @@ class UserController {
         return response.sendStatus(200);
     }
 
-    async logOut(request, response) {
+    async logOut(response) {
         /*
             #swagger.tags = ['user']
             #swagger.summary = 'Logout the loged user'
@@ -238,7 +238,7 @@ class UserController {
         return response
             .clearCookie('access_token')
             .status(200)
-            .json({ success: 'Logout success' });
+            .json({ success: 'Logout Success' });
     }
 }
 

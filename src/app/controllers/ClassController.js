@@ -43,7 +43,7 @@ class ClassController {
                 classroom_id: classId,
             })
         } catch (e) {
-            response.status(500).json({ error: "Failed to Create a Class" })
+            response.status(500).json({ error: 'Failed to Create a Class' })
         }
     }
 
@@ -118,10 +118,10 @@ class ClassController {
                 userId
             );
 
-            response.status(200).json({ success: "Student Removed" });
+            response.status(200).json({ success: 'Student Removed' });
 
         } catch (e) {
-            response.status(500).json(e)
+            response.status(500).json({ error: 'Failed to Remove Student' })
         }
     }
 
