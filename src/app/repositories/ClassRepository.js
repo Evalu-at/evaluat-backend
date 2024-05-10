@@ -2,7 +2,7 @@ const db = require("../../database");
 
 class ClassRepository {
     constructor() {
-        
+
     }
 
     async addFeeling(classId, sentimento,  email) {
@@ -20,7 +20,7 @@ class ClassRepository {
             nome: "fetch-class-id-by-name",
             text: "select id from turma where nome = $1",
             values: [nome],
-        }
+        };
 
         const id = await db.query(query);
 
@@ -32,7 +32,7 @@ class ClassRepository {
             nome: "fetch-class-id",
             text: "SELECT id FROM turma WHERE nome = $1 AND coordenador_id = $2",
             values: [nome, coordenador_id],
-        }
+        };
 
         const id = await db.query(query);
 
@@ -44,7 +44,7 @@ class ClassRepository {
             nome: "find-classroom",
             text: "SELECT EXISTS (SELECT id FROM turma WHERE id = $1)::bool",
             values: [classId],
-        }
+        };
 
         const id = await db.query(query);
 
@@ -55,7 +55,7 @@ class ClassRepository {
         const query = {
             nome: "check-classroom",
             text: "select EXISTS (SELECT * FROM turma)::int",
-        }
+        };
 
         const check = await db.query(query);
 
@@ -88,9 +88,22 @@ class ClassRepository {
             nome: "remove-student",
             text: "DELETE FROM turma_usuario WHERE turma_id = $1 AND usuario_id = $2",
             values: [classId, userId]
-        }
+        };
 
         await db.query(query);
+    }
+
+    async checkStudent(userId, turmaId) {
+
+        const query = {
+            name: "find-student-class",
+            text: "SELECT EXISTS (SELECT usuario_id FROM turma_usuario WHERE usuario_id = $1 AND turma_id = $2)::bool",
+            values: [userId, turmaId]
+        };
+
+        const check = await db.query(query);
+
+        return check[0].exists;
     }
 
     async deleteClass(id) {

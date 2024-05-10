@@ -84,6 +84,13 @@ class ClassController {
                 return response.status(401).json({ error: 'User Not Found' })
             }
 
+            const role = await UserRepository.findRole(email)
+
+            if (role === 'Coordenador')
+                return response
+                    .status(401)
+                    .json({ error: 'User Is Not a Student' })
+
             const userId = await UserRepository.findId(email)
 
             await ClassRepository.createStudent(
@@ -101,17 +108,22 @@ class ClassController {
         try {
             const { email, classId } = request.body
 
-            const aClassroom = await ClassRepository.findClassId(classId)
+            const aClassroom = await ClassRepository.findClassId(classId);
             if (!aClassroom) {
-                return response.status(401).json({ error: 'Class Not Found' })
+                return response.status(401).json({ error: 'Class Not Found' });
             }
 
             const aUser = await UserRepository.findEmail(email)
             if (!aUser) {
-                return response.status(401).json({ error: 'User Not Found' })
+                return response.status(401).json({ error: 'User Not Found' });
             }
 
-            const userId = await UserRepository.findId(email)
+            const userId = await UserRepository.findId(email);
+
+            const checkStudentIn = await ClassRepository.checkStudent(userId, classId);
+            if (!checkStudentIn) {
+                return response.status(401).json({ error: 'User not in this classroom' });
+            }
 
             await ClassRepository.removeStudent(
                 classId,

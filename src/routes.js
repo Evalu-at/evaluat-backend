@@ -9,7 +9,7 @@ const router = Router();
 
 router.use(cookieParser());
 
-router.get('/', (req, res) => {
+router.get('/', (res) => {
   res.send('Hello World from Evalu.at!');
 });
 
