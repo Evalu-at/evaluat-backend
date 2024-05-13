@@ -67,12 +67,12 @@ class UserController {
             }
 
             // cargo { coordenador OU aluno }
-            await UserRepository.createUser({
+            await UserRepository.createUser(
                 email,
                 nome,
                 senha,
                 cargo,
-            });
+            );
 
             return response.status(200).json({ success: 'Signup success' });
         } catch (e) {

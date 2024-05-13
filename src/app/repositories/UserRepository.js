@@ -1,4 +1,3 @@
-const { cos } = require("prelude-ls");
 const db = require("../../database");
 const bcrypt = require("bcrypt");
 
@@ -96,6 +95,7 @@ class UserRepository {
     }
 
     async createUser(email, nome, senha, cargo) {
+
         const hashPass = await bcrypt.hash(senha, 10);
 
         const query = {
