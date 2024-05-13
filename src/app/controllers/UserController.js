@@ -136,7 +136,7 @@ class UserController {
             const token = jwt.sign({ userId: userUUId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
             // Verificar tags de seguranca dos cookies!
-            return response.status(200).json({ acess_token: token, success: 'Login success' });
+            return response.status(200).cookie('access_token', token).json({ acess_token: token, success: 'Login success' });
         } catch (e) {
             response.status(500).json({ error: "Login failed" });
         }
