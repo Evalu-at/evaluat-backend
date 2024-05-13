@@ -48,6 +48,7 @@
     "cookie": "^0.6.0",
     "cookie-parser": "^1.4.6",
     "cookie-signature": "^1.0.6",
+    "cors": "^2.8.5",
     "create-require": "^1.1.1",
     "cross-spawn": "^7.0.3",
     "data-view-buffer": "^1.0.1",

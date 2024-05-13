@@ -5,13 +5,13 @@ class UserRepository {
     async findEmail(email) {
         const query = {
             name: "fetch-email",
-            text: "SELECT EXISTS (SELECT email FROM usuario WHERE email = $1)::int",
+            text: "SELECT EXISTS (SELECT email FROM usuario WHERE email = $1)::bool",
             values: [email],
         };
 
-        const rows = await db.query(query);
+        const mail = await db.query(query);
 
-        return rows[0].exists;
+        return mail[0].exists;
     }
 
     async findPassword(email) {
@@ -29,13 +29,35 @@ class UserRepository {
     async findId(email) {
         const query = {
             name: "fetch-email-id",
-            text: "SELECT usuario_id FROM usuario WHERE email = $1",
+            text: "SELECT id FROM usuario WHERE email = $1",
             values: [email],
         };
 
         const uu_id = await db.query(query);
 
-        return uu_id;
+        return uu_id[0].id;
+    }
+
+    async findVerifiedEmail(email) {
+        const query = {
+            name: "fetch-email-id",
+            text: "SELECT email_verificado FROM usuario WHERE email = $1", // Precisa de coluna pra verified email em usuario, return 0 ou 1
+            values: [email],
+        };
+
+        const verifiedEmail = await db.query(query);
+
+        return verifiedEmail;
+    }
+
+    async updateVerifiedEmail(email) {
+        const query = {
+            name: "update-email-verified",
+            text: "UPDATE usuario SET email_verificado = 1 WHERE email = $1", // Precisa de coluna pra verified email em usuario, return 0 ou 1
+            values: [email],
+        };
+
+        await db.query(query);
     }
 
     async findVerifiedEmail(email) {
@@ -57,36 +79,11 @@ class UserRepository {
             values: [email],
         };
 
-        const updatedEmailVerification = await db.query(query);
-
-        return updatedEmailVerification;
-    }
-
-    async findVerifiedEmail(email) {
-        const query = {
-            name: "fetch-email-id",
-            text: "SELECT email_verificado FROM usuario WHERE email = $1", // Precisa de coluna pra verified email em usuario, return 0 ou 1
-            values: [email],
-        };
-
-        const verifiedEmail = await db.query(query);
-
-        return verifiedEmail;
-    }
-
-    async updateVerifiedEmail(email) {
-        const query = {
-            name: "fetch-email-id",
-            text: "UPDATE usuario SET email_verificado = 1 WHERE email = $1", // Precisa de coluna pra verified email em usuario, return 0 ou 1
-            values: [email],
-        };
-
-        const updatedEmailVerification = await db.query(query);
-
-        return updatedEmailVerification;
+        await db.query(query);
     }
 
     async findRole(email) {
+
         const query = {
             name: "fetch-role",
             text: "SELECT cargo FROM usuario WHERE email = $1",
@@ -94,11 +91,11 @@ class UserRepository {
         };
 
         const role = await db.query(query);
-
         return role[0].cargo;
     }
 
-    async createUser({ email, nome, senha, cargo }) {
+    async createUser(email, nome, senha, cargo) {
+
         const hashPass = await bcrypt.hash(senha, 10);
 
         const query = {
@@ -107,12 +104,9 @@ class UserRepository {
             values: [email, nome, hashPass, cargo],
         };
 
-
-        const rows = await db.query(query);
-
-        return rows;
-
+        await db.query(query);
     }
+
 }
 
 module.exports = new UserRepository();

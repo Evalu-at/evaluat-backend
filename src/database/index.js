@@ -12,6 +12,6 @@ const pool = new Pool({
 pool.connect();
 
 exports.query = async (query, values) => {
-  const { rows } = await pool.query(query, values);
-  return rows;
+    const { rows } = await pool.query(query, values);
+    return rows;
 };
