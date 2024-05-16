@@ -30,8 +30,8 @@
       "get": {
         "description": "",
         "responses": {
-          "200": {
-            "description": "OK"
+          "default": {
+            "description": ""
           }
         }
       }
@@ -343,6 +343,51 @@
                   },
                   "periodo": {
                     "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classroom/student-evaluation": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "empatia": {
+                    "example": "4"
+                  },
+                  "organizacao": {
+                    "example": "3"
+                  },
+                  "inovacao": {
+                    "example": "2"
+                  },
+                  "flexibilidade": {
+                    "example": "5"
+                  },
+                  "incentivo": {
+                    "example": "1"
+                  },
+                  "engajamento": {
+                    "example": "3"
+                  },
+                  "feedback": {
+                    "example": "Few worded text about the professor receiving the evaluation"
                   }
                 }
               }
