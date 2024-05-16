@@ -1,8 +1,8 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const UserRepository = require("../repositories/UserRepository");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const UserRepository = require('../repositories/UserRepository');
 const speakeasy = require('speakeasy');
-const nodemailer =  require('nodemailer');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 class UserController {
@@ -20,9 +20,9 @@ class UserController {
         /*  #swagger.requestBody = {
                 required: true,
                 content: {
-                    "application/json": {
+                    'application/json': {
                         schema: {
-                            $ref: "#/components/schemas/userIdBody"
+                            $ref: '#/components/schemas/userIdBody'
                         }
                     }
                 }
@@ -32,7 +32,7 @@ class UserController {
         const users = await UserRepository.findEmail(email);
 
         if (!users) {
-            return response.status(404).json({ error: "User not found" });
+            return response.status(404).json({ error: 'User not found' });
         }
 
         response.json(users);
@@ -49,9 +49,9 @@ class UserController {
             /*  #swagger.requestBody = {
                     required: true,
                     content: {
-                        "application/json": {
+                        'application/json': {
                             schema: {
-                                $ref: "#/components/schemas/userAddBody"
+                                $ref: '#/components/schemas/userAddBody'
                             }
                         }
                     }
@@ -63,20 +63,20 @@ class UserController {
             if (userExists) {
                 return response
                     .status(400)
-                    .json({ error: "This email already in use" });
+                    .json({ error: 'This email already in use' });
             }
 
             // cargo { coordenador OU aluno }
-            await UserRepository.createUser({
+            await UserRepository.createUser(
                 email,
                 nome,
                 senha,
                 cargo,
-            });
+            );
 
-            return response.status(200).json({ success: "Signup success" });
+            return response.status(200).json({ success: 'Signup success' });
         } catch (e) {
-            return response.status(500).json({ error: "Signup failed" });
+            return response.status(500).json({ error: 'Signup failed' });
         }
     }
 
@@ -87,9 +87,8 @@ class UserController {
             const userRole = await UserRepository.findRole(email);
 
             response.json(userRole);
-
-        } catch(e) {
-            response.status(500).json({ error: "Search Failed"})
+        } catch (e) {
+            response.status(500).json({ error: 'Search Failed' });
         }
     }
 
@@ -100,12 +99,12 @@ class UserController {
         */
 
         const { email, senha } = request.body;
-            /*  #swagger.requestBody = {
+        /*  #swagger.requestBody = {
                     required: true,
                     content: {
-                        "application/json": {
+                        'application/json': {
                             schema: {
-                                $ref: "#/components/schemas/userLoginBody"
+                                $ref: '#/components/schemas/userLoginBody'
                             }
                         }
                     }
@@ -116,9 +115,9 @@ class UserController {
             const userMatch = await UserRepository.findEmail(email);
 
             if (!userMatch)
-            return response
-                .status(401)
-                .json({ error: "Authentication Failed" });
+                return response
+                    .status(401)
+                    .json({ error: 'Authentication Failed' });
 
             const password = await UserRepository.findPassword(email);
 
@@ -129,16 +128,23 @@ class UserController {
             if (!passwordMatch)
                 return response
                     .status(401)
-                    .json({ error: "Authentication Failed" });
+                    .json({ error: 'Authentication Failed' });
 
             const userUUId = await UserRepository.findId(email);
 
-            const token = jwt.sign({ userId: userUUId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+            const token = jwt.sign(
+                { userId: userUUId },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_EXPIRES_IN },
+            );
 
             // Verificar tags de seguranca dos cookies!
-            return response.status(200).cookie('access_token', token).json({ success: 'Login success' });
+            return response
+                .status(200)
+                .cookie('access_token', token)
+                .json({ success: 'Login success' });
         } catch (e) {
-            response.status(500).json({ error: "Login failed" });
+            response.status(500).json({ error: 'Login failed' });
         }
     }
 
@@ -149,10 +155,8 @@ class UserController {
         */
         return response
             .status(200)
-            .json({ message: "testando authorizacao de acesso ao formulario" });
+            .json({ message: 'testando authorizacao de acesso ao formulario' });
     }
-
-
 
     async sendEmail(request, response) {
         /*
@@ -167,7 +171,7 @@ class UserController {
             secret: UserController.secret.base32,
             encoding: 'base32',
             digits: 6,
-            time: 120
+            time: 120,
         });
 
         const transporter = nodemailer.createTransport({
@@ -177,25 +181,30 @@ class UserController {
             secure: true,
             auth: {
                 user: process.env.SENDER_EMAIL,
-                pass: process.env.SENDER_PASS
+                pass: process.env.SENDER_PASS,
             },
-        })
+        });
 
         const mail_data = {
             from: process.env.SENDER_EMAIL,
             to: email,
             subject: 'Codigo de Verificacao de Email - Evalu.At',
-            text: totpCode
-        }
+            text: totpCode,
+        };
 
         transporter.sendMail(mail_data, (err, info) => {
             if (err) {
                 console.log(err);
                 return response.sendStatus(500);
             }
-            response.status(200).send({ message: 'Email enviado!', message_id: info.messageId });
+            response
+                .status(200)
+                .send({
+                    message: 'Email Sent',
+                    message_id: info.messageId,
+                });
             return next();
-        })
+        });
     }
 
     async verifyEmail(request, response) {
@@ -210,28 +219,26 @@ class UserController {
             secret: UserController.secret.base32,
             encoding: 'base32',
             token: userTotpInput,
-            time: 120
+            time: 120,
         });
 
-        if(!verifiedTotp)
-            return response.sendStatus(401);
+        if (!verifiedTotp) return response.sendStatus(401);
 
         UserRepository.updateVerifiedEmail(email);
 
         return response.sendStatus(200);
-
     }
 
-    async logOut(request, response) {
+    async logOut(response) {
         /*
             #swagger.tags = ['user']
             #swagger.summary = 'Logout the loged user'
         */
 
         return response
-            .clearCookie("access_token")
+            .clearCookie('access_token')
             .status(200)
-            .json({ success: "Logout success" });
+            .json({ success: 'Logout Success' });
     }
 }
 
