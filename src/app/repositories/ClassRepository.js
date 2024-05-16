@@ -116,6 +116,16 @@ class ClassRepository {
 
         await db.query(query);
     }
+
+    async createEvaluation(datetime, empatia, organizacao, inovacao,flexibilidade, incentivo, engajamento, feedback) {
+        const query = {
+            nome: "create-evaluation",
+            text: "INSERT INTO avaliacao(data_envio, empatia, organizacao, inovacao, flexibilidade, incentivo, engajamento, feedback) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
+            values: [datetime, empatia, organizacao, inovacao, flexibilidade, incentivo, engajamento, feedback],
+        };
+
+        await db.query(query);
+    }
 }
 
 module.exports = new ClassRepository();
