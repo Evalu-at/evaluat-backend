@@ -1,5 +1,15 @@
-const ClassRepository = require('../repositories/ClassRepository');
-const UserRepository = require('../repositories/UserRepository');
+const ClassRepository = require('../repositories/ClassRepository')
+const UserRepository = require('../repositories/UserRepository')
+
+const criterios = {
+    empatia: null,
+    organizacao: null,
+    feedback: null,
+    inovacao: null,
+    flexibilidade: null,
+    incentivo: null,
+    engajamento: null,
+}
 
 class ClassController {
     constructor() {
@@ -9,7 +19,7 @@ class ClassController {
     async addClass(request, response) {
         try {
             const { email, nome, periodo } = request.body
-            var classId;
+            var classId
 
             const role = await UserRepository.findRole(email)
 
@@ -30,11 +40,7 @@ class ClassController {
                 }
             }
 
-            await ClassRepository.createClass(
-                userID,
-                nome,
-                periodo,
-            )
+            await ClassRepository.createClass(userID, nome, periodo)
 
             classId = await ClassRepository.findCoordClass(nome, userID)
 
@@ -93,10 +99,7 @@ class ClassController {
 
             const userId = await UserRepository.findId(email)
 
-            await ClassRepository.createStudent(
-                classId,
-                userId,
-            )
+            await ClassRepository.createStudent(classId, userId)
 
             response.status(200).json({ success: 'Student Added Succesfily' })
         } catch (e) {
@@ -108,43 +111,80 @@ class ClassController {
         try {
             const { email, classId } = request.body
 
-            const aClassroom = await ClassRepository.findClassId(classId);
+            const aClassroom = await ClassRepository.findClassId(classId)
             if (!aClassroom) {
-                return response.status(401).json({ error: 'Class Not Found' });
+                return response.status(401).json({ error: 'Class Not Found' })
             }
 
             const aUser = await UserRepository.findEmail(email)
             if (!aUser) {
-                return response.status(401).json({ error: 'User Not Found' });
+                return response.status(401).json({ error: 'User Not Found' })
             }
 
-            const userId = await UserRepository.findId(email);
+            const userId = await UserRepository.findId(email)
 
-            const checkStudentIn = await ClassRepository.checkStudent(userId, classId);
+            const checkStudentIn = await ClassRepository.checkStudent(
+                userId,
+                classId
+            )
             if (!checkStudentIn) {
-                return response.status(401).json({ error: 'User not in this classroom' });
+                return response
+                    .status(401)
+                    .json({ error: 'User not in this classroom' })
             }
 
-            await ClassRepository.removeStudent(
-                classId,
-                userId
-            );
+            await ClassRepository.removeStudent(classId, userId)
 
-            response.status(200).json({ success: 'Student Removed' });
-
+            response.status(200).json({ success: 'Student Removed' })
         } catch (e) {
             response.status(500).json({ error: 'Failed to Remove Student' })
         }
     }
 
     async getFeelings(request, response) {
-        const { nome, email, sentimento } = request.body;
+        const { nome, email, sentimento } = request.body
 
-        const classId = await ClassRepository.findClassByName(nome);
+        const classId = await ClassRepository.findClassByName(nome)
 
-        ClassRepository.addFeeling(classId, sentimento, email) // FRONT DEFINIR SE O EMAIL É "ANONIMO" OU O EMAIL REAL!!! ---------
+        await ClassRepository.addFeeling(classId, sentimento, email) // FRONT DEFINIR SE O EMAIL É "ANONIMO" OU O EMAIL REAL!!! ---------
 
-        return response.sendStatus(200);
+        return response.sendStatus(200)
+    }
+
+    // Adicionar professor não vai ter essa lógica
+    // async createTeacher(request, response) {
+    //     const { email, nome, titulo, disciplinas } = request.body
+
+    //     try {
+    //         const aTeacher = await ClassRepository.findTeacherEmail(email)
+
+    //         if (aTeacher) {
+    //             return response
+    //                 .status(401)
+    //                 .json({ error: 'Email Already Registered' })
+    //         }
+
+    //         await ClassRepository.addTeacher(email, nome, titulo, disciplinas)
+    //     } catch (e) {
+    //         return response.status(401).json({ error: 'Failed to add teacher' })
+    //     }
+
+    //     return response.status(200).json({ success: 'Teacher added successfully' })
+    // }
+
+    // add validations
+    async createEvaluation(request, response) {
+        const { docenteId, turmaId, disciplina, new_criterios } = request.body
+        const all_criterios = Object.assign({}, criterios, new_criterios)
+
+        await ClassRepository.addEvaluation(
+            docenteId,
+            turmaId,
+            disciplina,
+            all_criterios
+        )
+
+        return response.sendStatus(200)
     }
 }
 

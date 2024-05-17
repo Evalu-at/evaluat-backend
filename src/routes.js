@@ -9,7 +9,7 @@ const router = Router();
 
 router.use(cookieParser());
 
-router.get('/', (res) => {
+router.get('/', (req, res) => {
   res.send('Hello World from Evalu.at!');
 });
 
@@ -30,5 +30,6 @@ router.get('/formulario', Middleware.authorization, Middleware.email_verificatio
 
 // Test routes
 router.get('/roleTest', UserController.findRole);
+router.post('/evaluateTest', ClassController.createEvaluation);
 
 module.exports = router;
