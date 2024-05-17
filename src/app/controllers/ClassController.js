@@ -186,6 +186,30 @@ class ClassController {
 
         return response.sendStatus(200)
     }
+
+    async getEvaluation(request, response){
+        const { empatia, organizacao, inovacao,
+            flexibilidade, incentivo, engajamento,
+            feedback } = request.body;
+
+        var datetime = new Date();
+        datetime = datetime.toISOString().slice(0,10);
+        console.log(datetime);
+
+        try{
+            ClassRepository.createEvaluation(datetime, empatia,
+                organizacao, inovacao, flexibilidade, incentivo,
+                engajamento, feedback);
+        }
+        catch(e){
+            return response.status(500).json({ error: 'Failed to Remove Student' });
+        }
+
+        return response.sendStatus(200);
+    }
+
 }
 
 module.exports = new ClassController()
+
+
