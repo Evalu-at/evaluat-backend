@@ -30,8 +30,8 @@
       "get": {
         "description": "",
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -369,25 +369,25 @@
                 "type": "object",
                 "properties": {
                   "empatia": {
-                    "example": "4"
+                    "example": "any"
                   },
                   "organizacao": {
-                    "example": "3"
+                    "example": "any"
                   },
                   "inovacao": {
-                    "example": "2"
+                    "example": "any"
                   },
                   "flexibilidade": {
-                    "example": "5"
+                    "example": "any"
                   },
                   "incentivo": {
-                    "example": "1"
+                    "example": "any"
                   },
                   "engajamento": {
-                    "example": "3"
+                    "example": "any"
                   },
                   "feedback": {
-                    "example": "Few worded text about the professor receiving the evaluation"
+                    "example": "any"
                   }
                 }
               }

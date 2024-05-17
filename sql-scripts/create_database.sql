@@ -55,3 +55,24 @@ CREATE TABLE IF NOT EXISTS avaliacao (
     FOREIGN KEY (professor_id) REFERENCES professor(id),
     FOREIGN KEY (turma_id) REFERENCES turma(id)
 );
+
+/*
+CREATE TABLE IF NOT EXISTS avaliacao (
+	empatia INT NOT NULL,
+    organizacao INT NOT NULL,
+    feedback INT NOT NULL,
+    inovacao INT NOT NULL,
+    flexibilidade INT NOT NULL,
+    incentivo INT NOT NULL,
+    engajamento INT NOT NULL,
+    CHECK (empatia IN (0,1,2,3,4,5)),
+    CHECK (organizacao IN (0,1,2,3,4,5)),
+    CHECK (feedback IN (0,1,2,3,4,5)),
+    CHECK (inovacao IN (0,1,2,3,4,5)),
+    CHECK (flexibilidade IN (0,1,2,3,4,5)),
+    CHECK (incentivo IN (0,1,2,3,4,5)),
+    CHECK (engajamento IN (0,1,2,3,4,5)),
+	FOREIGN KEY (turma_id) REFERENCES turma(id),
+    FOREIGN KEY (professor_id) REFERENCES professor(id)
+);
+*/
