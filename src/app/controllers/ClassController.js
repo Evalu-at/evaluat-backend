@@ -177,36 +177,38 @@ class ClassController {
         const { docenteId, turmaId, disciplina, new_criterios } = request.body
         const all_criterios = Object.assign({}, criterios, new_criterios)
 
-        await ClassRepository.addEvaluation(
-            docenteId,
-            turmaId,
-            disciplina,
-            all_criterios
-        )
+        try {
 
-        return response.sendStatus(200)
+            await ClassRepository.addEvaluation(
+                docenteId,
+                turmaId,
+                disciplina,
+                all_criterios
+            )
+
+        } catch(e) {
+            return response.status(401).json({ error: e })
+        }
+
+        return response.status(200).json({ success: 'Evaluation Created Successfully' })
     }
 
-    // async getEvaluation(request, response){
-    //     const { empatia, organizacao, inovacao,
-    //         flexibilidade, incentivo, engajamento,
-    //         feedback } = request.body;
+    // Validate now 
+    async setEvaluation(request, response){
+        const { forms, avaliacaoId, alunoId } = request.body;
 
-    //     var datetime = new Date();
-    //     datetime = datetime.toISOString().slice(0,10);
-    //     console.log(datetime);
+        try{
+            var datetime = new Date();
+            datetime = datetime.toISOString().slice(0,10);
 
-    //     try{
-    //         ClassRepository.createEvaluation(datetime, empatia,
-    //             organizacao, inovacao, flexibilidade, incentivo,
-    //             engajamento, feedback);
-    //     }
-    //     catch(e){
-    //         return response.status(500).json({ error: 'Failed to Remove Student' });
-    //     }
+            ClassRepository.createEvaluation(datetime, avaliacaoId, alunoId, forms);
+        }
+        catch(e){
+            return response.status(500).json({ error: 'Failed to set Evaluation' });
+        }
 
-    //     return response.sendStatus(200);
-    // }
+        return response.sendStatus(200);
+    }
 
 }
 

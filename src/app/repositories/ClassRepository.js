@@ -25,6 +25,18 @@ class ClassRepository {
         return mail[0].exists
     }
 
+    async findTeacherId(id) {
+        const query = {
+            nome: 'find-teacher-id',
+            text: 'SELECT EXISTS (SELECT id FROM professor WHERE id = $1)::bool',
+            values: [id],
+        }
+
+        const ID = await db.query(query)
+
+        return ID[0].exists
+    }
+
     async findClassByName(nome) {
         const query = {
             nome: 'fetch-class-id-by-name',
@@ -145,15 +157,15 @@ class ClassRepository {
         await db.query(query);
     }
 
-    // async createEvaluation(datetime, empatia, organizacao, inovacao,flexibilidade, incentivo, engajamento, feedback) {
-    //     const query = {
-    //         nome: "create-evaluation",
-    //         text: "INSERT INTO avaliacao(data_envio, empatia, organizacao, inovacao, flexibilidade, incentivo, engajamento, feedback) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
-    //         values: [datetime, empatia, organizacao, inovacao, flexibilidade, incentivo, engajamento, feedback],
-    //     };
+    async createEvaluation(datetime, avaliacaoId, alunoId, forms) {
+        const query = {
+            nome: "create-evaluation",
+            text: "INSERT INTO respostas (DATA, avaliacao_id, aluno_id, respostas) VALUES($1, $2, $3, $4)",
+            values: [datetime, avaliacaoId, alunoId, forms],
+        };
 
-    //     await db.query(query);
-    // }
+        await db.query(query);
+    }
 }
 
 module.exports = new ClassRepository()

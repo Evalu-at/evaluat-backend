@@ -25,12 +25,12 @@ router.post('/classroom/add-student', ClassController.addStudent);
 router.post('/classroom/remove-student', ClassController.removeStudent);
 router.post('/classroom/delete', ClassController.deleteClass);
 router.post('/classroom/add', ClassController.addClass);
-router.post('/classroom/student-evaluation', ClassController.getEvaluation);
 
 router.get('/formulario', Middleware.authorization, Middleware.email_verification, UserController.formulario);
 
 // Test routes
 router.get('/roleTest', UserController.findRole);
 router.post('/evaluateTest', ClassController.createEvaluation);
+router.post('/classroom/student-evaluation', ClassController.setEvaluation);
 
 module.exports = router;

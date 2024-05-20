@@ -355,43 +355,8 @@
       "post": {
         "description": "",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "empatia": {
-                    "example": "any"
-                  },
-                  "organizacao": {
-                    "example": "any"
-                  },
-                  "inovacao": {
-                    "example": "any"
-                  },
-                  "flexibilidade": {
-                    "example": "any"
-                  },
-                  "incentivo": {
-                    "example": "any"
-                  },
-                  "engajamento": {
-                    "example": "any"
-                  },
-                  "feedback": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
+          "default": {
+            "description": ""
           }
         }
       }
