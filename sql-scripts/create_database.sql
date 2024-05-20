@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS avaliacao (
 );
 
 CREATE TABLE IF NOT EXISTS respostas (
+    id UUID DEFAULT uuid_generate_v4(),
     data DATE NOT NULL,
     avaliacao_id UUID NOT NULL,
     aluno_id UUID NOT NULL,

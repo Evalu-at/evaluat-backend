@@ -126,6 +126,18 @@ class ClassRepository {
         return check[0].exists
     }
 
+    async checkEvaluationClass(id) {
+        const query = {
+            name: 'find-evaluation-classroom',
+            text: 'SELECT turma_id FROM avaliacao WHERE id = $1',
+            values: [id],
+        }
+
+        const check = await db.query(query)
+
+        return check[0].turma_id
+    }
+
     async deleteClass(id) {
         const query = {
             name: 'delete-class',

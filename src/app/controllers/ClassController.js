@@ -172,12 +172,22 @@ class ClassController {
     //     return response.status(200).json({ success: 'Teacher added successfully' })
     // }
 
-    // add validations
     async createEvaluation(request, response) {
         const { docenteId, turmaId, disciplina, new_criterios } = request.body
         const all_criterios = Object.assign({}, criterios, new_criterios)
 
         try {
+            const teacherId = await ClassRepository.findTeacherId(docenteId);
+
+            if (!teacherId) {
+                return response.status(401).json({ error: 'Teacher Not Registered' })
+            }
+
+            const classId = await ClassRepository.findClassId(turmaId);
+
+            if (!classId) {
+                return response.status(401).json({ error: 'Class Not Registered' })
+            }
 
             await ClassRepository.addEvaluation(
                 docenteId,
@@ -185,33 +195,43 @@ class ClassController {
                 disciplina,
                 all_criterios
             )
-
-        } catch(e) {
-            return response.status(401).json({ error: e })
+        } catch (e) {
+            return response.status(401).json({ error: 'Failed to create Evaluation' })
         }
 
-        return response.status(200).json({ success: 'Evaluation Created Successfully' })
+        return response
+            .status(200)
+            .json({ success: 'Evaluation Created Successfully' })
     }
 
-    // Validate now 
-    async setEvaluation(request, response){
-        const { forms, avaliacaoId, alunoId } = request.body;
+    async setEvaluation(request, response) {
+        const { forms, avaliacaoId, alunoId } = request.body
 
-        try{
-            var datetime = new Date();
-            datetime = datetime.toISOString().slice(0,10);
+        try {
+            var datetime = new Date()
+            datetime = datetime.toISOString().slice(0, 10)
 
-            ClassRepository.createEvaluation(datetime, avaliacaoId, alunoId, forms);
+            const classId = await ClassRepository.checkEvaluationClass(avaliacaoId);
+            const student = await ClassRepository.checkStudent(alunoId, classId);
+
+            if (!student) {
+                return response.status(401).json({ error: 'Student not in Classroom' })
+            }
+
+            ClassRepository.createEvaluation(
+                datetime,
+                avaliacaoId,
+                alunoId,
+                forms
+            )
+        } catch (e) {
+            return response
+                .status(500)
+                .json({ error: 'Failed to set Evaluation' })
         }
-        catch(e){
-            return response.status(500).json({ error: 'Failed to set Evaluation' });
-        }
 
-        return response.sendStatus(200);
+        return response.status(200).json({ success: 'Evaluation added' })
     }
-
 }
 
 module.exports = new ClassController()
-
-
