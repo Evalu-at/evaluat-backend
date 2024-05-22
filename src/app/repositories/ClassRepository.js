@@ -40,7 +40,7 @@ class ClassRepository {
     async findClassByName(nome) {
         const query = {
             nome: 'fetch-class-id-by-name',
-            text: 'SELECT id FRIM turma WHERE nome = $1',
+            text: 'SELECT id FROM turma WHERE nome = $1',
             values: [nome],
         }
 
@@ -177,6 +177,54 @@ class ClassRepository {
         };
 
         await db.query(query);
+    }
+
+    async countAnswers(turma){
+        const query = {
+            nome: "assert-answer-total",
+            text: "SELECT COUNT(respostas) FROM respostas WHERE avaliacao = (SELECT id FROM avaliacao WHERE turma = $1)",
+            values: [turma]
+        };
+
+        await db.query(query);
+
+        return db.query(query);
+    }
+
+    async countAnswers(turma){
+        const query = {
+            nome: "assert-answer-total",
+            text: "SELECT COUNT(respostas) FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma = $1)",
+            values: [turma]
+        };
+
+        await db.query(query);
+
+        return db.query(query);
+    }
+
+    async countEvaluations(turma){
+        const query = {
+            nome: "assert-answer-total",
+            text: "SELECT COUNT(*) FROM avaliacao WHERE turma = $1",
+            values: [turma]
+        };
+
+        await db.query(query);
+
+        return db.query(query);
+    }
+
+    async studentQuorum(turma_id){
+        const query = {
+            nome: "assert-student-quorum",
+            text: "SELECT COUNT(*) FROM turma_usuario WHERE turma_id = $1",
+            values: [turma_id]
+        };
+
+        await db.query(query);
+
+        return db.query(query);
     }
 }
 

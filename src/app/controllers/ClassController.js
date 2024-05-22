@@ -232,6 +232,18 @@ class ClassController {
 
         return response.status(200).json({ success: 'Evaluation added' })
     }
+
+    async classInfo(request, response) {
+        const { turma, turma_id } = request.body;
+
+        const countRespostas = ClassRepository.countAnswers(turma);
+        const countAvaliacoes = ClassRepository.countEvaluations(turma);
+        const quorumEstudantes = ClassRepository.removeStudent(turma_id);
+
+        const engajamento = countRespostas / quorumEstudantes;
+
+        return response.status(200).json({ countRespostas: countRespostas, engajamento: engajamento, avaliacoes: countAvaliacoes });
+    }
 }
 
 module.exports = new ClassController()
