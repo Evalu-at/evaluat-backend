@@ -25,6 +25,7 @@ router.post('/classroom/add-student', ClassController.addStudent);
 router.post('/classroom/remove-student', ClassController.removeStudent);
 router.post('/classroom/delete', ClassController.deleteClass);
 router.post('/classroom/add', ClassController.addClass);
+router.get('/classroom/info', ClassController.classInfo);
 
 router.get('/formulario', Middleware.authorization, Middleware.email_verification, UserController.formulario);
 

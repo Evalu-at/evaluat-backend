@@ -239,11 +239,12 @@ class ClassController {
         const countRespostas = ClassRepository.countAnswers(turma);
         const countAvaliacoes = ClassRepository.countEvaluations(turma);
         const quorumEstudantes = ClassRepository.studentQuorum(turma_id);
+        const gradeSum = ClassRepository.gradeSum(turma_id);
 
         var mean = 0;
         var engajamento = countRespostas / quorumEstudantes;
 
-        return response.status(200).json({ countRespostas: countRespostas, engajamentos: engajamento, avaliacoes: countAvaliacoes });
+        return response.status(200).json({ countRespostas: countRespostas, engajamentos: engajamento, avaliacoes: countAvaliacoes, gradeSum: gradeSum});
     }
 }
 
