@@ -234,15 +234,16 @@ class ClassController {
     }
 
     async classInfo(request, response) {
-        const { turma, turma_id } = request.body;
+        const { turma, turma_id } = request.body; // como pega a turma ou como id da turma
 
         const countRespostas = ClassRepository.countAnswers(turma);
         const countAvaliacoes = ClassRepository.countEvaluations(turma);
-        const quorumEstudantes = ClassRepository.removeStudent(turma_id);
+        const quorumEstudantes = ClassRepository.studentQuorum(turma_id);
 
-        const engajamento = countRespostas / quorumEstudantes;
+        var mean = 0;
+        var engajamento = countRespostas / quorumEstudantes;
 
-        return response.status(200).json({ countRespostas: countRespostas, engajamento: engajamento, avaliacoes: countAvaliacoes });
+        return response.status(200).json({ countRespostas: countRespostas, engajamentos: engajamento, avaliacoes: countAvaliacoes });
     }
 }
 

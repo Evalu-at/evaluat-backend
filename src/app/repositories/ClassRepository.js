@@ -191,18 +191,6 @@ class ClassRepository {
         return db.query(query);
     }
 
-    async countAnswers(turma){
-        const query = {
-            nome: "assert-answer-total",
-            text: "SELECT COUNT(respostas) FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma = $1)",
-            values: [turma]
-        };
-
-        await db.query(query);
-
-        return db.query(query);
-    }
-
     async countEvaluations(turma){
         const query = {
             nome: "assert-answer-total",
@@ -221,6 +209,18 @@ class ClassRepository {
             text: "SELECT COUNT(*) FROM turma_usuario WHERE turma_id = $1",
             values: [turma_id]
         };
+
+        await db.query(query);
+
+        return db.query(query);
+    }
+
+    async gradeSum(turma_id){
+        const query = {
+            nome: "assert-class-grade-sum",
+            text: "SELECT value::INTEGER FROM respostas, jsonb_each_text(info) AS each_info(key, value)", // como pego as notas do jsonb
+            values: [turma_id]
+        }
 
         await db.query(query);
 
