@@ -149,15 +149,15 @@ class ClassRepository {
     }
 
     // A logica pode mudar
-    // async addTeacher(email, nome, titulo, disciplinas) {
-    //     const query = {
-    //         name: 'add-teacher',
-    //         text: 'INSERT INTO professor (email, nome, titulo, disciplinas) VALUES($1, $2, $3, $4)',
-    //         values: [email, nome, titulo, disciplinas]
-    //     }
+    async addTeacher(email, nome, titulo, disciplinas) {
+        const query = {
+            name: 'add-teacher',
+            text: 'INSERT INTO professor (email, nome, titulo, disciplinas) VALUES($1, $2, $3, $4)',
+            values: [email, nome, titulo, disciplinas]
+        }
 
-    //     await db.query(query);
-    // }
+        await db.query(query);
+    }
 
     async addEvaluation(docenteId, turmaId, disciplina, criterios) {
         const query = {
@@ -182,7 +182,7 @@ class ClassRepository {
     async countAnswers(turma){
         const query = {
             nome: "assert-answer-total",
-            text: "SELECT COUNT(respostas) FROM respostas WHERE avaliacao = (SELECT id FROM avaliacao WHERE turma = $1)",
+            text: "SELECT COUNT(respostas) FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma_id = $1)",
             values: [turma]
         };
 
@@ -194,7 +194,7 @@ class ClassRepository {
     async countEvaluations(turma){
         const query = {
             nome: "assert-answer-total",
-            text: "SELECT COUNT(*) FROM avaliacao WHERE turma = $1",
+            text: "SELECT COUNT(*) FROM avaliacao WHERE turma_id = $1",
             values: [turma]
         };
 
@@ -215,16 +215,25 @@ class ClassRepository {
         return db.query(query);
     }
 
-    async gradeSum(turma_id){
+    async getJsonGrades(turma_id){
         const query = {
-            nome: "assert-class-grade-sum",
-            text: "SELECT value::INTEGER FROM respostas, jsonb_each_text(info) AS each_info(key, value)", // como pego as notas do jsonb
+            nome: "get-grade-json",
+            text: "SELECT respostas FROM respostas WHERE avaliacao_id = $1", // como pego as notas do jsonb
             values: [turma_id]
         }
 
-        await db.query(query);
+        const grades = await db.query(query);
 
-        return db.query(query);
+        console.log(grades);
+
+        return grades;
+    }
+
+    async lastAnswersEval(turma_id){
+        const query = {
+            nome: "get-last-two-evaluation-answers",
+            text: "SELECT "
+        }
     }
 }
 

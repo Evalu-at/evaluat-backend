@@ -152,29 +152,29 @@ class ClassController {
     }
 
     // Adicionar professor não vai ter essa lógica
-    // async createTeacher(request, response) {
-    //     const { email, nome, titulo, disciplinas } = request.body
+    async createTeacher(request, response) {
+        const { email, nome, titulo, disciplinas } = request.body
 
-    //     try {
-    //         const aTeacher = await ClassRepository.findTeacherEmail(email)
+        try {
+            const aTeacher = await ClassRepository.findTeacherEmail(email)
 
-    //         if (aTeacher) {
-    //             return response
-    //                 .status(401)
-    //                 .json({ error: 'Email Already Registered' })
-    //         }
+            if (aTeacher) {
+                return response
+                    .status(401)
+                    .json({ error: 'Email Already Registered' })
+            }
 
-    //         await ClassRepository.addTeacher(email, nome, titulo, disciplinas)
-    //     } catch (e) {
-    //         return response.status(401).json({ error: 'Failed to add teacher' })
-    //     }
+            await ClassRepository.addTeacher(email, nome, titulo, disciplinas)
+        } catch (e) {
+            return response.status(401).json({ error: 'Failed to add teacher' })
+        }
 
-    //     return response.status(200).json({ success: 'Teacher added successfully' })
-    // }
+        return response.status(200).json({ success: 'Teacher added successfully' })
+    }
 
     async createEvaluation(request, response) {
         const { docenteId, turmaId, disciplina, new_criterios } = request.body
-        const all_criterios = Object.assign({}, criterios, new_criterios)
+        const all_criterios = Object.assign({}, criterios, new_criterios) //
 
         try {
             const teacherId = await ClassRepository.findTeacherId(docenteId);
@@ -234,17 +234,18 @@ class ClassController {
     }
 
     async classInfo(request, response) {
-        const { turma, turma_id } = request.body; // como pega a turma ou como id da turma
+        const { turma_id } = request.body; //
 
-        const countRespostas = ClassRepository.countAnswers(turma);
-        const countAvaliacoes = ClassRepository.countEvaluations(turma);
-        const quorumEstudantes = ClassRepository.studentQuorum(turma_id);
-        const gradeSum = ClassRepository.gradeSum(turma_id);
+        const countRespostas = await ClassRepository.countAnswers(turma_id);
+        const countAvaliacoes = await ClassRepository.countEvaluations(turma_id);
+        const quorumEstudantes = await ClassRepository.studentQuorum(turma_id);
+        const grades = await ClassRepository.getJsonGrades(turma_id);
 
-        var mean = 0;
+        // var mean = gradeSum / quorumEstudantes;
         var engajamento = countRespostas / quorumEstudantes;
 
-        return response.status(200).json({ countRespostas: countRespostas, engajamentos: engajamento, avaliacoes: countAvaliacoes, gradeSum: gradeSum});
+        return response.status(200).json({ all_grades: grades });
+
     }
 }
 

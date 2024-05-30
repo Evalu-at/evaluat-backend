@@ -30,6 +30,7 @@ router.get('/classroom/info', ClassController.classInfo);
 router.get('/formulario', Middleware.authorization, Middleware.email_verification, UserController.formulario);
 
 // Test routes
+router.post('/create-teacher', ClassController.createTeacher);
 router.get('/roleTest', UserController.findRole);
 router.post('/evaluateTest', ClassController.createEvaluation);
 router.post('/classroom/student-evaluation', ClassController.setEvaluation);
