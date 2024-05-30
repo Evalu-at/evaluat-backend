@@ -137,12 +137,14 @@ class UserController {
                 process.env.JWT_SECRET,
                 { expiresIn: process.env.JWT_EXPIRES_IN },
             );
+            
+            const userRole = await UserRepository.findRole(email);
 
             // Verificar tags de seguranca dos cookies!
             return response
                 .status(200)
                 .cookie('access_token', token)
-                .json({ success: 'Login success' });
+                .json({ success: 'Login success', role: userRole});
         } catch (e) {
             response.status(500).json({ error: 'Login failed' });
         }
