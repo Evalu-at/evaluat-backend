@@ -351,6 +351,16 @@
         }
       }
     },
+    "/classroom/info": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/formulario": {
       "get": {
         "tags": [
@@ -367,6 +377,42 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/create-teacher": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "nome": {
+                    "example": "any"
+                  },
+                  "titulo": {
+                    "example": "any"
+                  },
+                  "disciplinas": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }

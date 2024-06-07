@@ -182,7 +182,7 @@ class ClassRepository {
     async countAnswers(turma){
         const query = {
             nome: "assert-answer-total",
-            text: "SELECT COUNT(respostas) FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma_id = $1)",
+            text: "SELECT COUNT(*) FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma_id = $1)",
             values: [turma]
         };
 
@@ -218,7 +218,7 @@ class ClassRepository {
     async getJsonGrades(turma_id){
         const query = {
             nome: "get-grade-json",
-            text: "SELECT respostas FROM respostas WHERE avaliacao_id = $1", // como pego as notas do jsonb
+            text: "SELECT respostas FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma_id = $1)", // como pego as notas do jsonb
             values: [turma_id]
         }
 

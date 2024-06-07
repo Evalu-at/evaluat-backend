@@ -1,3 +1,4 @@
+const { object } = require('prop-types')
 const ClassRepository = require('../repositories/ClassRepository')
 const UserRepository = require('../repositories/UserRepository')
 
@@ -146,7 +147,7 @@ class ClassController {
 
         const classId = await ClassRepository.findClassByName(nome)
 
-        await ClassRepository.addFeeling(classId, sentimento, email) // FRONT DEFINIR SE O EMAIL É "ANONIMO" OU O EMAIL REAL!!! ---------
+        await ClassRepository.addFeeling(classId, sentimento, email) // FRONT DEFINIR SE O EMAIL
 
         return response.sendStatus(200)
     }
@@ -234,17 +235,35 @@ class ClassController {
     }
 
     async classInfo(request, response) {
-        const { turma_id } = request.body; //
+        const { turma_id } = request.body; // CHORE: quorum (query quorum tirar os coordenadores), info basicas (dbb), verificaçao se ja resp ?
 
         const countRespostas = await ClassRepository.countAnswers(turma_id);
         const countAvaliacoes = await ClassRepository.countEvaluations(turma_id);
         const quorumEstudantes = await ClassRepository.studentQuorum(turma_id);
         const grades = await ClassRepository.getJsonGrades(turma_id);
 
-        // var mean = gradeSum / quorumEstudantes;
+        var sum = 0;
+        var nog = 0;
+
+        grades.forEach(obj => {
+            const values = Object.values(obj.respostas);
+            values.forEach(value => {
+              sum += value;
+              nog += 1;
+            });
+          });
+
+        const gradeMean = sum / nog;
+
+        // console.log(gradeMean); // Ok!
+
         var engajamento = countRespostas / quorumEstudantes;
 
-        return response.status(200).json({ all_grades: grades });
+        return response.status(200).json(
+            { gradeMean: gradeMean,
+              countRespostas: countRespostas,
+              countAvaliacoes: countAvaliacoes,
+              quorumEstudantes: quorumEstudantes });
 
     }
 }

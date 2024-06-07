@@ -224,7 +224,7 @@ class UserController {
 
         if (!verifiedTotp) return response.sendStatus(402);
 
-        UserRepository.updateVerifiedEmail(email);
+        await UserRepository.updateVerifiedEmail(email);
 
         return response.sendStatus(200);
     }
