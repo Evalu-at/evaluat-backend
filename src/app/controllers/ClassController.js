@@ -1,14 +1,15 @@
 const ClassRepository = require('../repositories/ClassRepository')
 const UserRepository = require('../repositories/UserRepository')
+const MetrictsRepository =  require('../repositories/MetricsRepository')
 
 const criterios = {
-    empatia: null,
-    organizacao: null,
-    feedback: null,
-    inovacao: null,
-    flexibilidade: null,
-    incentivo: null,
-    engajamento: null,
+    empatia: 0,
+    organizacao: 0,
+    feedback: 0,
+    inovacao: 0,
+    flexibilidade: 0,
+    incentivo: 0,
+    engajamento: 0,
 }
 
 class ClassController {
@@ -152,25 +153,25 @@ class ClassController {
     }
 
     // Adicionar professor não vai ter essa lógica
-    // async createTeacher(request, response) {
-    //     const { email, nome, titulo, disciplinas } = request.body
+    async createTeacher(request, response) {
+        const { email, nome, titulo, disciplinas } = request.body
 
-    //     try {
-    //         const aTeacher = await ClassRepository.findTeacherEmail(email)
+        try {
+            const aTeacher = await ClassRepository.findTeacherEmail(email)
 
-    //         if (aTeacher) {
-    //             return response
-    //                 .status(401)
-    //                 .json({ error: 'Email Already Registered' })
-    //         }
+            if (aTeacher) {
+                return response
+                    .status(401)
+                    .json({ error: 'Email Already Registered' })
+            }
 
-    //         await ClassRepository.addTeacher(email, nome, titulo, disciplinas)
-    //     } catch (e) {
-    //         return response.status(401).json({ error: 'Failed to add teacher' })
-    //     }
+            await ClassRepository.addTeacher(email, nome, titulo, disciplinas)
+        } catch (e) {
+            return response.status(401).json({ error: 'Failed to add teacher' })
+        }
 
-    //     return response.status(200).json({ success: 'Teacher added successfully' })
-    // }
+        return response.status(200).json({ success: 'Teacher added successfully' })
+    }
 
     async createEvaluation(request, response) {
         const { docenteId, turmaId, disciplina, new_criterios } = request.body

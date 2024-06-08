@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const cookieParser = require('cookie-parser')
 
+const MetricsController = require('./app/controllers/MetricsController')
 const ClassController = require('./app/controllers/ClassController')
 const UserController = require('./app/controllers/UserController')
 const Middleware = require('./app/middlewares/Middleware')
@@ -35,6 +36,8 @@ router.post('/classroom/delete', ClassController.deleteClass)
 router.post('/classroom/add', ClassController.addClass)
 
 router.get('/find/user-role', UserController.findRole)
+
+router.post('/metrics/teacher', MetricsController.TeacherMetrics)
 
 router.get(
     '/formulario',

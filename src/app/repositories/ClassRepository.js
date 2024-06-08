@@ -149,15 +149,15 @@ class ClassRepository {
     }
 
     // A logica pode mudar
-    // async addTeacher(email, nome, titulo, disciplinas) {
-    //     const query = {
-    //         name: 'add-teacher',
-    //         text: 'INSERT INTO professor (email, nome, titulo, disciplinas) VALUES($1, $2, $3, $4)',
-    //         values: [email, nome, titulo, disciplinas]
-    //     }
+    async addTeacher(email, nome, titulo, disciplinas) {
+        const query = {
+            name: 'add-teacher',
+            text: 'INSERT INTO professor (email, nome, titulo, disciplinas) VALUES($1, $2, $3, $4)',
+            values: [email, nome, titulo, disciplinas]
+        }
 
-    //     await db.query(query);
-    // }
+        await db.query(query);
+    }
 
     async addEvaluation(docenteId, turmaId, disciplina, criterios) {
         const query = {
