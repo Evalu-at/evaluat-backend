@@ -38,6 +38,7 @@ router.post('/classroom/add', ClassController.addClass)
 router.get('/find/user-role', UserController.findRole)
 
 router.post('/metrics/teacher', MetricsController.TeacherMetrics)
+router.post('/metrics/export', MetricsController.exportMetrics)
 
 router.get(
     '/formulario',
