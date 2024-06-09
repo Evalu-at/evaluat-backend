@@ -35,3 +35,33 @@ CREATE TABLE IF NOT EXISTS sentimento (
 	email VARCHAR(255),
 	FOREIGN KEY (turma_id) REFERENCES turma(id)
 );
+
+CREATE TABLE IF NOT EXISTS professor (
+    id UUID DEFAULT uuid_generate_v4(),
+    email VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    disciplinas VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS avaliacao (
+    id UUID DEFAULT uuid_generate_v4(),
+    professor_id UUID NOT NULL,
+    turma_id UUID NOT NULL,
+	disciplina VARCHAR(255) NOT NULL,
+	criterios JSONB NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (professor_id) REFERENCES professor(id),
+    FOREIGN KEY (turma_id) REFERENCES turma(id)
+);
+
+CREATE TABLE IF NOT EXISTS respostas (
+    id UUID DEFAULT uuid_generate_v4(),
+    data DATE NOT NULL,
+    avaliacao_id UUID NOT NULL,
+    aluno_id UUID NOT NULL,
+    respostas JSONB NOT NULL,
+    FOREIGN KEY (avaliacao_id) REFERENCES avaliacao(id),
+    FOREIGN KEY (aluno_id) REFERENCES usuario(id)
+);
