@@ -1,4 +1,5 @@
 const MetricsRepository = require("../repositories/MetricsRepository");
+const UserRepository = require("../repositories/UserRepository");
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
@@ -38,10 +39,19 @@ class MetricsController {
     }
 
     async exportMetrics(request, response) {
-        
-        // ! Código repetido, refatorar se possível
+        const { email, professor_id } = request.body
+    
+        const role = await UserRepository.findRole(email)
+        if (role === 'Aluno')
+            return response
+                .status(401)
+                .json({ error: 'Usuário não é um coordenador' })
 
-        const { professor_id } = request.body
+        
+
+
+        // ? Código repetido, refatorar se possível
+
         const metrics = await MetricsRepository.fetchTheacherMetrics(professor_id)
 
         const metric_values = metrics[0].criterios
@@ -67,8 +77,7 @@ class MetricsController {
         
         
 
-
-        // * Criando um PDF e exportando
+        // Criando um PDF e exportando
 
         var dados = JSON.parse(JSON.stringify(new_metrics))
         const doc = new PDFDocument()
@@ -87,7 +96,7 @@ class MetricsController {
             doc.fontSize(12).text(`${criterio} : ${valor}`, {
                 align: 'left'
             })
-            })
+        })
         
         doc.moveDown()
         doc.fontSize(10).text('Respostas:'+ dados.respostas).text('Media:'+ dados.media)
@@ -95,15 +104,14 @@ class MetricsController {
         doc.end()
      
         
-        stream.on('finish', function () {
+        stream.on('finish', function(){
             response.download('output.pdf', 'metricas_prof.pdf', function(err){
-                if (err) {
-               
+                if(err){
                     response.status(500).send("Error downloading the file.")
                 }
             })
         })
-        stream.on('error', function(err) {
+        stream.on('error', function(err){
             response.status(500).send("Error writing the PDF file.")
         })
     }
