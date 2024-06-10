@@ -16,10 +16,14 @@ CREATE TABLE IF NOT EXISTS usuario (
 CREATE TABLE IF NOT EXISTS turma (
 	id UUID DEFAULT uuid_generate_v4(),
     coordenador_id UUID,
+    turno varchar(255) NOT NULL,
+    curso varchar(255) NOT NULL,
+    nivel_formacao varchar(255) NOT NULL, -- se é graduação, tecnico, mestrando
     nome varchar(255) UNIQUE NOT NULL,
 	periodo int NOT NULL,
 	PRIMARY KEY (id),
-    FOREIGN KEY (coordenador_id) REFERENCES usuario(id)
+    FOREIGN KEY (coordenador_id) REFERENCES usuario(id),
+    CHECK (turno IN ('Vespertino','Matutino', 'Noturno'))   
 );
 
 CREATE TABLE IF NOT EXISTS turma_usuario (

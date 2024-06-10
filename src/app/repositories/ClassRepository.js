@@ -84,11 +84,11 @@ class ClassRepository {
         return check
     }
 
-    async createClass(userID, nome, periodo) {
+    async createClass(userID, nome, periodo, turno, curso, nivel_formacao) {
         const query = {
             name: 'create-class',
-            text: 'INSERT INTO turma(coordenador_id, nome, periodo) VALUES($1, $2, $3)',
-            values: [userID, nome, periodo],
+            text: 'INSERT INTO turma(coordenador_id, nome, periodo, turno, curso, nivel_formacao) VALUES($1, $2, $3, $4, $5, $6)',
+            values: [userID, nome, periodo, turno, curso, nivel_formacao],
         }
 
         await db.query(query)
@@ -186,9 +186,9 @@ class ClassRepository {
             values: [turma]
         };
 
-        await db.query(query);
+        const countAnswers = await db.query(query);
 
-        return db.query(query);
+        return countAnswers[0].count;
     }
 
     async countEvaluations(turma){
@@ -210,9 +210,9 @@ class ClassRepository {
             values: [turma_id]
         };
 
-        await db.query(query);
+        const studentQuorum = await db.query(query);
 
-        return db.query(query);
+        return studentQuorum[0].count;
     }
 
     async getJsonGrades(turma_id){
@@ -224,16 +224,79 @@ class ClassRepository {
 
         const grades = await db.query(query);
 
-        console.log(grades);
-
         return grades;
     }
 
-    async lastAnswersEval(turma_id){
+    async getClassName(turma_id){
         const query = {
             nome: "get-last-two-evaluation-answers",
-            text: "SELECT "
+            text: "SELECT nome FROM turma WHERE id = $1",
+            values: [turma_id]
         }
+
+        const className = await db.query(query);
+
+        return className;
+    }
+
+    async getUsersFromClass(turma_id){
+        const query = {
+            nome: "get-students-from-class",
+            text: "SELECT nome, email FROM usuario WHERE id IN (SELECT usuario_id FROM turma_usuario WHERE turma_id = $1)",
+            values: [turma_id]
+        }
+
+        const studentsFromClass = await db.query(query);
+
+        return studentsFromClass;
+    }
+
+    async getCurso(turma_id){
+        const query = {
+            nome: "get-course-belonging-to-class",
+            text: "SELECT curso FROM turma where id = $1",
+            values: [turma_id]
+        }
+
+        const courseClass = await db.query(query);
+
+        return courseClass[0].curso;
+    }
+
+    async getTurno(turma_id){
+        const query = {
+            nome: "get-course-belonging-to-class",
+            text: "SELECT turno FROM turma where id = $1",
+            values: [turma_id]
+        }
+
+        const classShift = await db.query(query);
+
+        return classShift[0].turno;
+    }
+
+    async getNivelFormacao(turma_id) {
+        const query = {
+            nome: 'fetch-class-type-by-id',
+            text: 'SELECT nivel_formacao FROM turma WHERE id = $1',
+            values: [turma_id],
+        }
+
+        const nivel_formacao = await db.query(query);
+
+        return nivel_formacao[0].nivel_formacao;
+    }
+
+    async getPeriodo(turma_id) {
+        const query = {
+            nome: 'fetch-term-by-id',
+            text: 'SELECT periodo FROM turma WHERE turma_id = $1',
+            values: [turma_id],
+        }
+
+        const periodo = await db.query(query)
+
+        return periodo[0].periodo
     }
 }
 

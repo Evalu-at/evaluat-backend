@@ -19,8 +19,8 @@ class ClassController {
 
     async addClass(request, response) {
         try {
-            const { email, nome, periodo } = request.body
-            var classId
+            const { email, nome, periodo, turno, curso, nivel_formacao } = request.body;
+            var classId;
 
             const role = await UserRepository.findRole(email)
 
@@ -41,7 +41,8 @@ class ClassController {
                 }
             }
 
-            await ClassRepository.createClass(userID, nome, periodo)
+            await ClassRepository.createClass(userID, nome, periodo, turno, curso, nivel_formacao)
+
 
             classId = await ClassRepository.findCoordClass(nome, userID)
 
@@ -235,15 +236,20 @@ class ClassController {
     }
 
     async classInfo(request, response) {
-        const { turma_id } = request.body; // CHORE: quorum (query quorum tirar os coordenadores), info basicas (dbb), verificaçao se ja resp ?
+        const { turma_id } = request.body; // verificaçao se ja resp ?
 
         const countRespostas = await ClassRepository.countAnswers(turma_id);
         const countAvaliacoes = await ClassRepository.countEvaluations(turma_id);
         const quorumEstudantes = await ClassRepository.studentQuorum(turma_id);
         const grades = await ClassRepository.getJsonGrades(turma_id);
+        const nomeClasse = await ClassRepository.getClassName(turma_id);
+        const cursoClasse = await ClassRepository.getCurso(turma_id);
+        const tipoCurso = await ClassRepository.getNivelFormacao(turma_id);
+        const turnoCurso = await ClassRepository.getTurno(turma_id);
+        const getUsers = await ClassRepository.getUsersFromClass(turma_id);
 
         var sum = 0;
-        var nog = 0;
+        var nog = 0; // number of grades
 
         grades.forEach(obj => {
             const values = Object.values(obj.respostas);
@@ -251,19 +257,25 @@ class ClassController {
               sum += value;
               nog += 1;
             });
-          });
+        });
 
         const gradeMean = sum / nog;
 
-        // console.log(gradeMean); // Ok!
-
-        var engajamento = countRespostas / quorumEstudantes;
+        const engajamento = (countRespostas / quorumEstudantes * 100) + "%";
 
         return response.status(200).json(
-            { gradeMean: gradeMean,
-              countRespostas: countRespostas,
-              countAvaliacoes: countAvaliacoes,
-              quorumEstudantes: quorumEstudantes });
+            {
+                gradeMean: gradeMean,
+                countRespostas: countRespostas,
+                countAvaliacoesCriadas: countAvaliacoes,
+                quorumEstudantes: quorumEstudantes,
+                engajamento: engajamento,
+                nomeClasse: nomeClasse,
+                cursoClasse: cursoClasse,
+                tipoCurso: tipoCurso,
+                turnoCurso: turnoCurso,
+                users: getUsers
+            });
 
     }
 }
