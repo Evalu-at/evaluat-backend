@@ -1,4 +1,5 @@
 const MetricsRepository = require("../repositories/MetricsRepository");
+const UserRepository = require("../repositories/UserRepository");
 
 function round(value, precision) {
     var multiplier = Math.pow(10, precision || 0);
