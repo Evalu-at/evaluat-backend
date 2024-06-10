@@ -343,6 +343,15 @@
                   },
                   "periodo": {
                     "example": "any"
+                  },
+                  "turno": {
+                    "example": "any"
+                  },
+                  "curso": {
+                    "example": "any"
+                  },
+                  "nivel_formacao": {
+                    "example": "any"
                   }
                 }
               }
