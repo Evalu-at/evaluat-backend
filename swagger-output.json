@@ -179,8 +179,8 @@
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
+          "402": {
+            "description": "Payment Required"
           }
         },
         "requestBody": {
@@ -343,10 +343,29 @@
                   },
                   "periodo": {
                     "example": "any"
+                  },
+                  "turno": {
+                    "example": "any"
+                  },
+                  "curso": {
+                    "example": "any"
+                  },
+                  "nivel_formacao": {
+                    "example": "any"
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/classroom/info": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -371,6 +390,42 @@
         }
       }
     },
+    "/create-teacher": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "nome": {
+                    "example": "any"
+                  },
+                  "titulo": {
+                    "example": "any"
+                  },
+                  "disciplinas": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/roleTest": {
       "get": {
         "description": "",
@@ -380,6 +435,78 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/evaluateTest": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "docenteId": {
+                    "example": "any"
+                  },
+                  "turmaId": {
+                    "example": "any"
+                  },
+                  "disciplina": {
+                    "example": "any"
+                  },
+                  "new_criterios": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classroom/student-evaluation": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "forms": {
+                    "example": "any"
+                  },
+                  "avaliacaoId": {
+                    "example": "any"
+                  },
+                  "alunoId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
