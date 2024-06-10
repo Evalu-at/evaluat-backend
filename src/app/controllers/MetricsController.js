@@ -7,7 +7,15 @@ function round(value, precision) {
 
 class MetricsController {
     async TeacherMetrics(request, response) {
-        const { professor_id } = request.body
+        const { email, professor_id } = request.body
+
+        const role = await UserRepository.findRole(email)
+
+        if (role === 'Aluno')
+            return response
+                .status(401)
+                .json({ error: 'O usuário não é um coordenador' })
+
         const metrics = await MetricsRepository.fetchTheacherMetrics(professor_id)
 
         const metric_values = metrics[0].criterios
