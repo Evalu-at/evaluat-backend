@@ -1,544 +1,568 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "version": "0.1.2",
-    "title": "Evalu.at API",
-    "description": "Documentation of the endpoints from the Evalu.at API"
-  },
-  "servers": [
-    {
-      "url": "https://evalu-at.github.io/evaluat-backend/",
-      "description": ""
-    }
-  ],
-  "tags": [
-    {
-      "name": "default",
-      "description": ""
+    "openapi": "3.0.0",
+    "info": {
+      "version": "0.1.2",
+      "title": "Evalu.at API",
+      "description": "Documentation of the endpoints from the Evalu.at API"
     },
-    {
-      "name": "user",
-      "description": "user endpoints"
-    },
-    {
-      "name": "adm",
-      "description": "adm endpoints"
-    }
-  ],
-  "paths": {
-    "/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+    "servers": [
+      {
+        "url": "https://evalu-at.github.io/evaluat-backend/",
+        "description": ""
       }
-    },
-    "/validate-jwt": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/user/id": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Returns a user by email",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/userIdBody"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logout the loged user",
-        "description": "",
-        "responses": {
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/user/add": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Create a new user",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/userAddBody"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Login an existent user",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/userLoginBody"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/get_feelings": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "nome": {
-                    "example": "any"
-                  },
-                  "email": {
-                    "example": "any"
-                  },
-                  "sentimento": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/send-otp": {
-      "post": {
-        "tags": [
-          "adm"
-        ],
-        "summary": "Endpoint in test",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/verify": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logout the loged user",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "402": {
-            "description": "Payment Required"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "userTotpInput": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/classroom/add-student": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "classId": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/classroom/remove-student": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "classId": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/classroom/create-evaluation": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "docenteId": {
-                    "example": "any"
-                  },
-                  "turmaId": {
-                    "example": "any"
-                  },
-                  "disciplina": {
-                    "example": "any"
-                  },
-                  "new_criterios": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/classroom/set-student-evaluation": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "forms": {
-                    "example": "any"
-                  },
-                  "avaliacaoId": {
-                    "example": "any"
-                  },
-                  "alunoId": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/classroom/delete": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "nome": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/classroom/add": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "nome": {
-                    "example": "any"
-                  },
-                  "periodo": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/find/user-role": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/formulario": {
-      "get": {
-        "tags": [
-          "adm"
-        ],
-        "summary": "Endpoint in test",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "userIdBody": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "user@email.com"
-          }
-        },
-        "required": [
-          "id"
-        ]
+    ],
+    "tags": [
+      {
+        "name": "default",
+        "description": ""
       },
-      "userAddBody": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "user@email.com"
-          },
-          "nome": {
-            "type": "string",
-            "example": "username"
-          },
-          "senha": {
-            "type": "string",
-            "example": "password"
-          }
-        },
-        "required": [
-          "email",
-          "nome",
-          "senha"
-        ]
+      {
+        "name": "user",
+        "description": "user endpoints"
       },
-      "userLoginBody": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "user@email.com"
-          },
-          "senha": {
-            "type": "string",
-            "example": "password"
+      {
+        "name": "adm",
+        "description": "adm endpoints"
+      }
+    ],
+    "paths": {
+      "/": {
+        "get": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
           }
+        }
+      },
+      "/validate-jwt": {
+        "get": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "403": {
+              "description": "Forbidden"
+            }
+          }
+        }
+      },
+      "/user/id": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Returns a user by email",
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userIdBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/logout": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logout the loged user",
+          "description": "",
+          "responses": {
+            "403": {
+              "description": "Forbidden"
+            }
+          }
+        }
+      },
+      "/user/add": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Create a new user",
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Bad Request"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userAddBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/login": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Login an existent user",
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userLoginBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/get_feelings": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": {
+                      "example": "any"
+                    },
+                    "email": {
+                      "example": "any"
+                    },
+                    "sentimento": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/send-otp": {
+        "post": {
+          "tags": [
+            "adm"
+          ],
+          "summary": "Endpoint in test",
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/user/verify": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logout the loged user",
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "402": {
+              "description": "Payment Required"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "example": "any"
+                    },
+                    "userTotpInput": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/classroom/add-student": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "example": "any"
+                    },
+                    "classId": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/classroom/remove-student": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "example": "any"
+                    },
+                    "classId": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/classroom/create-evaluation": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "docenteId": {
+                      "example": "any"
+                    },
+                    "turmaId": {
+                      "example": "any"
+                    },
+                    "disciplina": {
+                      "example": "any"
+                    },
+                    "new_criterios": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/classroom/set-student-evaluation": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "forms": {
+                      "example": "any"
+                    },
+                    "avaliacaoId": {
+                      "example": "any"
+                    },
+                    "alunoId": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/classroom/delete": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "example": "any"
+                    },
+                    "nome": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/classroom/add": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "example": "any"
+                    },
+                    "nome": {
+                      "example": "any"
+                    },
+                    "periodo": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/find/user-role": {
+        "get": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/metrics/teacher": {
+        "post": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "professor_id": {
+                      "example": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/formulario": {
+        "get": {
+          "tags": [
+            "adm"
+          ],
+          "summary": "Endpoint in test",
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "Unauthorized"
+            },
+            "403": {
+              "description": "Forbidden"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "userIdBody": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "user@email.com"
+            }
+          },
+          "required": [
+            "id"
+          ]
         },
-        "required": [
-          "email",
-          "senha"
-        ]
+        "userAddBody": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "user@email.com"
+            },
+            "nome": {
+              "type": "string",
+              "example": "username"
+            },
+            "senha": {
+              "type": "string",
+              "example": "password"
+            }
+          },
+          "required": [
+            "email",
+            "nome",
+            "senha"
+          ]
+        },
+        "userLoginBody": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "user@email.com"
+            },
+            "senha": {
+              "type": "string",
+              "example": "password"
+            }
+          },
+          "required": [
+            "email",
+            "senha"
+          ]
+        }
       }
     }
   }
-}
