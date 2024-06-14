@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-require('dotenv').config(); 
+require('dotenv').config();
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -15,3 +15,4 @@ exports.query = async (query, values) => {
     const { rows } = await pool.query(query, values);
     return rows;
 };
+ 
