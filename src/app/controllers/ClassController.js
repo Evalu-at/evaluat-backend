@@ -125,7 +125,7 @@ class ClassController {
                 return response.status(401).json({ error: 'Professor Not Found' })
             }
 
-            console.log(`found: ${}`);
+            console.log(`found: ${aUser}`);
 
             const professorId = await UserRepository.findId(email)
 
