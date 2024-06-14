@@ -109,6 +109,34 @@ class ClassController {
         }
     }
 
+    async addProfessor(request, response) {
+        try {
+            const { email, classId } = request.body
+
+            const aClassroom = await ClassRepository.findClassId(classId)
+            if (!aClassroom) {
+                return response.status(401).json({ error: 'Class Not Found' })
+            }
+
+            console.log(`found: ${aClassroom}`);
+
+            const aUser = await UserRepository.findProfessor(email)
+            if (!aUser) {
+                return response.status(401).json({ error: 'Professor Not Found' })
+            }
+
+            console.log(`found: ${}`);
+
+            const professorId = await UserRepository.findId(email)
+
+            await ClassRepository.addProfessorClass(classId, professorId)
+
+            response.status(200).json({ success: 'Professor Added Succesfily' })
+        } catch (e) {
+            response.status(500).json({ error: 'Failed to Add Professor' })
+        }
+    }
+
     async removeStudent(request, response) {
         try {
             const { email, classId } = request.body
@@ -276,6 +304,16 @@ class ClassController {
                 turnoCurso: turnoCurso,
                 users: getUsers
             });
+
+    }
+
+    async getGeneralInishgts(request, response) { // Precisa ser testado!!
+        const { coordenador_id } = request.body;
+
+        const professors_ids = ClassRepository.getProfessors(coordenador_id);
+        const professorsGrades = ClassRepository.getProfessorsGrades(professors_ids);
+
+
 
     }
 }

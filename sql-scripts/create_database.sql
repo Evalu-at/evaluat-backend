@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS turma (
 	periodo int NOT NULL,
 	PRIMARY KEY (id),
     FOREIGN KEY (coordenador_id) REFERENCES usuario(id),
-    CHECK (turno IN ('Vespertino','Matutino', 'Noturno'))   
+    CHECK (turno IN ('Vespertino','Matutino', 'Noturno'))
 );
 
 CREATE TABLE IF NOT EXISTS turma_usuario (
@@ -47,6 +47,13 @@ CREATE TABLE IF NOT EXISTS professor (
     titulo VARCHAR(255) NOT NULL,
     disciplinas VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS turma_professor (
+    turma_id UUID,
+    professor_id UUID,
+    FOREIGN KEY (turma_id) REFERENCES turma(id),
+    FOREIGN KEY (professor_id) REFERENCES professor(id)
 );
 
 CREATE TABLE IF NOT EXISTS avaliacao (

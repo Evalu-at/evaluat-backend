@@ -104,6 +104,16 @@ class ClassRepository {
         await db.query(query)
     }
 
+    async addProfessorClass(classId, userId) {
+        const query = {
+            nome: 'create-student',
+            text: 'INSERT INTO turma_professor(turma_id, ) VALUES($1, $2)',
+            values: [classId, userId],
+        }
+
+        await db.query(query)
+    }
+
     async removeStudent(classId, userId) {
         const query = {
             nome: 'remove-student',
@@ -218,7 +228,7 @@ class ClassRepository {
     async getJsonGrades(turma_id){
         const query = {
             nome: "get-grade-json",
-            text: "SELECT respostas FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma_id = $1)", // como pego as notas do jsonb
+            text: "SELECT respostas FROM respostas WHERE avaliacao_id = (SELECT id FROM avaliacao WHERE turma_id = $1)",
             values: [turma_id]
         }
 
@@ -298,6 +308,32 @@ class ClassRepository {
 
         return periodo[0].periodo
     }
+
+    async getProfessors(coordenador_id) {
+        const query = {
+            nome: 'fetch-professors-by-coord_id',
+            text: 'SELECT professor_id FROM turma_professor WHERE turma_id IN (SELECT id FROM turma WHERE coordenador_id = $1)',
+            values: [coordenador_id],
+        }
+
+        const professores = await db.query(query);
+
+        return professores;
+    }
+
+    async getProfessorsGrades(professor_id) {
+        const query = {
+            nome: 'fetch-all-professors-evaluation-grades',
+            text: 'SELECT respostas FROM respostas WHERE avaliacao_id IN (SELECT id FROM avaliacao WHERE professor_id = ANY($1))',
+            values: [professor_id],
+        }
+
+        const respostas = await db.query(query);
+
+        return respostas;
+    }
+
+
 }
 
 module.exports = new ClassRepository()

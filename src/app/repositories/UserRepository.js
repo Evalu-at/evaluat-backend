@@ -14,6 +14,18 @@ class UserRepository {
         return mail[0].exists;
     }
 
+    async findProfessor(email) {
+        const query = {
+            name: "fetch-email",
+            text: "SELECT EXISTS (SELECT email FROM professor WHERE email = $1)::bool",
+            values: [email],
+        };
+
+        const mail = await db.query(query);
+
+        return mail[0].exists;
+    }
+
     async findPassword(email) {
         const query = {
             name: "fetch-email-password",
@@ -30,6 +42,18 @@ class UserRepository {
         const query = {
             name: "fetch-email-id",
             text: "SELECT id FROM usuario WHERE email = $1",
+            values: [email],
+        };
+
+        const uu_id = await db.query(query);
+
+        return uu_id[0].id;
+    }
+
+    async findProfessorId(email) {
+        const query = {
+            name: "fetch-email-id",
+            text: "SELECT id FROM professor WHERE email = $1",
             values: [email],
         };
 
