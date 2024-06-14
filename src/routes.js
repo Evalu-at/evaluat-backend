@@ -22,11 +22,12 @@ router.post('/user/verify', UserController.verifyEmail); // Verificar email
 router.get('/user/logout', Middleware.authorization, UserController.logOut);
 
 router.post('/classroom/add-student', ClassController.addStudent);
-router.post('/classroom/add-professor', ClassController.addProfessor);
+router.post('/classroom/add-professor', ClassController.addProfessor); // Ajustar querie para ver se professor já está na turma
 router.post('/classroom/remove-student', ClassController.removeStudent);
 router.post('/classroom/delete', ClassController.deleteClass);
 router.post('/classroom/add', ClassController.addClass);
 router.get('/classroom/info', ClassController.classInfo);
+router.get('/classroom/general-insights', ClassController.getGeneralInishgts);
 
 router.get('/formulario', Middleware.authorization, Middleware.email_verification, UserController.formulario);
 

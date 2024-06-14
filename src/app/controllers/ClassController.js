@@ -118,16 +118,12 @@ class ClassController {
                 return response.status(401).json({ error: 'Class Not Found' })
             }
 
-            console.log(`found: ${aClassroom}`);
-
             const aUser = await UserRepository.findProfessor(email)
             if (!aUser) {
                 return response.status(401).json({ error: 'Professor Not Found' })
             }
 
-            console.log(`found: ${aUser}`);
-
-            const professorId = await UserRepository.findId(email)
+            const professorId = await UserRepository.findProfessorId(email)
 
             await ClassRepository.addProfessorClass(classId, professorId)
 
@@ -307,14 +303,23 @@ class ClassController {
 
     }
 
-    async getGeneralInishgts(request, response) { // Precisa ser testado!!
+    async getGeneralInishgts(request, response) { // Precisa ser corrigido, return response associar professor à avaliação, fazer média da nota dos professores, devolver media em ordem decrescente
+        
         const { coordenador_id } = request.body;
 
-        const professors_ids = ClassRepository.getProfessors(coordenador_id);
-        const professorsGrades = ClassRepository.getProfessorsGrades(professors_ids);
+        const professors_ids = await ClassRepository.getProfessorsFromClass(coordenador_id);
+        const professorsGrades = await ClassRepository.getProfessorsGrades(professors_ids);
 
+        const avaliacao_id = professorsGrades.map(obj => obj.avaliacao_id);
 
+        const nome_professores = await ClassRepository.getProfessorsFromAvaliacao(avaliacao_id);
 
+        return response.status(200).json(
+        {
+            professors_ids: professors_ids,
+            nome_professores: nome_professores,
+            professorsGrades: professorsGrades
+        });
     }
 }
 

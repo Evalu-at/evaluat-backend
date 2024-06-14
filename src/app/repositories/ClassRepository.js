@@ -104,11 +104,11 @@ class ClassRepository {
         await db.query(query)
     }
 
-    async addProfessorClass(classId, userId) {
+    async addProfessorClass(classId, professorId) {
         const query = {
             nome: 'create-student',
-            text: 'INSERT INTO turma_professor(turma_id, ) VALUES($1, $2)',
-            values: [classId, userId],
+            text: 'INSERT INTO turma_professor(turma_id, professor_id) VALUES($1, $2)',
+            values: [classId, professorId],
         }
 
         await db.query(query)
@@ -309,7 +309,7 @@ class ClassRepository {
         return periodo[0].periodo
     }
 
-    async getProfessors(coordenador_id) {
+    async getProfessorsFromClass(coordenador_id) {
         const query = {
             nome: 'fetch-professors-by-coord_id',
             text: 'SELECT professor_id FROM turma_professor WHERE turma_id IN (SELECT id FROM turma WHERE coordenador_id = $1)',
@@ -321,12 +321,26 @@ class ClassRepository {
         return professores;
     }
 
-    async getProfessorsGrades(professor_id) {
+    async getProfessorsFromAvaliacao(avaliacao_id) {
         const query = {
-            nome: 'fetch-all-professors-evaluation-grades',
-            text: 'SELECT respostas FROM respostas WHERE avaliacao_id IN (SELECT id FROM avaliacao WHERE professor_id = ANY($1))',
-            values: [professor_id],
+            nome: 'fetch-professors-by-coord_id',
+            text: 'SELECT nome FROM professor WHERE id IN (SELECT professor_id FROM avaliacao WHERE id = ANY($1))',
+            values: [avaliacao_id],
         }
+
+        const professores = await db.query(query);
+
+        return professores;
+    }
+
+    async getProfessorsGrades(professorObjects) {
+        const professor_ids = professorObjects.map(obj => obj.professor_id);  // Extract professor_id from each object
+
+        const query = {
+            name: 'fetch-all-professors-evaluation-grades',
+            text: 'SELECT respostas, avaliacao_id FROM respostas WHERE avaliacao_id IN (SELECT id FROM avaliacao WHERE professor_id = ANY($1))',
+            values: [professor_ids],
+        };
 
         const respostas = await db.query(query);
 
